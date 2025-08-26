@@ -5,7 +5,7 @@
 namespace G1Emergency2025.BD.Migrations
 {
     /// <inheritdoc />
-    public partial class Inicio3 : Migration
+    public partial class Inicio : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Emergency.BD.Datos.Entity
+namespace G1Emergency2025.BD.Datos.Entity
 {
     [Index(nameof(Codigo), Name = "Codigo_UQ", IsUnique = true)]
     public class Rol

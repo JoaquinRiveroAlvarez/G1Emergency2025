@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G1Emergency2025.BD.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250826141459_Inicio3")]
-    partial class Inicio3
+    [Migration("20250826152055_Inicio")]
+    partial class Inicio
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace G1Emergency2025.BD.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.Causa", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Causa", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace G1Emergency2025.BD.Migrations
                     b.ToTable("Causas");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.DiagPresuntivo", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.DiagPresuntivo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -74,7 +74,7 @@ namespace G1Emergency2025.BD.Migrations
                     b.ToTable("DiagPresuntivos");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.Evento", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Evento", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -116,7 +116,7 @@ namespace G1Emergency2025.BD.Migrations
                     b.ToTable("Eventos");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.EventoLugarHecho", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.EventoLugarHecho", b =>
                 {
                     b.Property<int>("LugarHechoId")
                         .HasColumnType("int");
@@ -131,7 +131,51 @@ namespace G1Emergency2025.BD.Migrations
                     b.ToTable("EventoLugarHechos");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.LugarHecho", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.EventoUsuario", b =>
+                {
+                    b.Property<int>("EventoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EventoId", "UsuarioId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("EventoUsuarios");
+                });
+
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Historico", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("FechaEntrada")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaSalida")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MovilId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TripulanteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovilId");
+
+                    b.HasIndex("TripulanteId");
+
+                    b.ToTable("Historicos");
+                });
+
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.LugarHecho", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -162,7 +206,7 @@ namespace G1Emergency2025.BD.Migrations
                     b.ToTable("LugarHechos");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.Movil", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Movil", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -186,7 +230,7 @@ namespace G1Emergency2025.BD.Migrations
                     b.ToTable("Moviles");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.MovilEvento", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.MovilEvento", b =>
                 {
                     b.Property<int>("MovilId")
                         .HasColumnType("int");
@@ -201,7 +245,7 @@ namespace G1Emergency2025.BD.Migrations
                     b.ToTable("MovilEventos");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.Paciente", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Paciente", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -219,7 +263,7 @@ namespace G1Emergency2025.BD.Migrations
                     b.ToTable("Pacientes");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.PacienteEvento", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.PacienteEvento", b =>
                 {
                     b.Property<int>("PacienteId")
                         .HasColumnType("int");
@@ -234,7 +278,7 @@ namespace G1Emergency2025.BD.Migrations
                     b.ToTable("PacienteEventos");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.Persona", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Persona", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -294,7 +338,7 @@ namespace G1Emergency2025.BD.Migrations
                     b.ToTable("Personas");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.Rol", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Rol", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -320,7 +364,7 @@ namespace G1Emergency2025.BD.Migrations
                     b.ToTable("Rols");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.TipoEstado", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.TipoEstado", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -346,7 +390,7 @@ namespace G1Emergency2025.BD.Migrations
                     b.ToTable("TipoEstados");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.TipoEstadoEvento", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.TipoEstadoEvento", b =>
                 {
                     b.Property<int>("EventoId")
                         .HasColumnType("int");
@@ -359,88 +403,6 @@ namespace G1Emergency2025.BD.Migrations
                     b.HasIndex("TipoEstadoId");
 
                     b.ToTable("TipoEstadoEventos");
-                });
-
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.Usuario", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Contrasena")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Usuarios");
-                });
-
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.UsuarioRol", b =>
-                {
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RolId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UsuarioId", "RolId");
-
-                    b.HasIndex("RolId");
-
-                    b.ToTable("UsuarioRols");
-                });
-
-            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.EventoUsuario", b =>
-                {
-                    b.Property<int>("EventoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EventoId", "UsuarioId");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("EventoUsuarios");
-                });
-
-            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Historico", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("FechaEntrada")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaSalida")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MovilId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TripulanteId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MovilId");
-
-                    b.HasIndex("TripulanteId");
-
-                    b.ToTable("Historicos");
                 });
 
             modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.TipoMovil", b =>
@@ -543,9 +505,47 @@ namespace G1Emergency2025.BD.Migrations
                     b.ToTable("Tripulantes");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.DiagPresuntivo", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Usuario", b =>
                 {
-                    b.HasOne("Emergency.BD.Datos.Entity.Paciente", "Pacientes")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Contrasena")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.UsuarioRol", b =>
+                {
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RolId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UsuarioId", "RolId");
+
+                    b.HasIndex("RolId");
+
+                    b.ToTable("UsuarioRols");
+                });
+
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.DiagPresuntivo", b =>
+                {
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Paciente", "Pacientes")
                         .WithMany()
                         .HasForeignKey("PacienteId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -554,9 +554,9 @@ namespace G1Emergency2025.BD.Migrations
                     b.Navigation("Pacientes");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.Evento", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Evento", b =>
                 {
-                    b.HasOne("Emergency.BD.Datos.Entity.Causa", "Causa")
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Causa", "Causa")
                         .WithMany()
                         .HasForeignKey("CausaId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -565,15 +565,15 @@ namespace G1Emergency2025.BD.Migrations
                     b.Navigation("Causa");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.EventoLugarHecho", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.EventoLugarHecho", b =>
                 {
-                    b.HasOne("Emergency.BD.Datos.Entity.Evento", "Eventos")
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Evento", "Eventos")
                         .WithMany("EventoLugarHechos")
                         .HasForeignKey("EventoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Emergency.BD.Datos.Entity.LugarHecho", "LugarHecho")
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.LugarHecho", "LugarHecho")
                         .WithMany("EventoLugarHechos")
                         .HasForeignKey("LugarHechoId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -584,118 +584,15 @@ namespace G1Emergency2025.BD.Migrations
                     b.Navigation("LugarHecho");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.MovilEvento", b =>
-                {
-                    b.HasOne("Emergency.BD.Datos.Entity.Evento", "Eventos")
-                        .WithMany("MovilEventos")
-                        .HasForeignKey("EventoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Emergency.BD.Datos.Entity.Movil", "Movils")
-                        .WithMany("MovilEventos")
-                        .HasForeignKey("MovilId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Eventos");
-
-                    b.Navigation("Movils");
-                });
-
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.PacienteEvento", b =>
-                {
-                    b.HasOne("Emergency.BD.Datos.Entity.Evento", "Eventos")
-                        .WithMany("PacienteEventos")
-                        .HasForeignKey("EventoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Emergency.BD.Datos.Entity.Paciente", "Pacientes")
-                        .WithMany("PacienteEventos")
-                        .HasForeignKey("PacienteId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Eventos");
-
-                    b.Navigation("Pacientes");
-                });
-
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.Persona", b =>
-                {
-                    b.HasOne("Emergency.BD.Datos.Entity.Paciente", "Paciente")
-                        .WithOne("Persona")
-                        .HasForeignKey("Emergency.BD.Datos.Entity.Persona", "PacienteId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Tripulante", "Tripulantes")
-                        .WithOne("Persona")
-                        .HasForeignKey("Emergency.BD.Datos.Entity.Persona", "TripulanteId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Emergency.BD.Datos.Entity.Usuario", "Usuario")
-                        .WithOne("Persona")
-                        .HasForeignKey("Emergency.BD.Datos.Entity.Persona", "UsuarioId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Paciente");
-
-                    b.Navigation("Tripulantes");
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.TipoEstadoEvento", b =>
-                {
-                    b.HasOne("Emergency.BD.Datos.Entity.Evento", "Eventos")
-                        .WithMany("TipoEstadoEventos")
-                        .HasForeignKey("EventoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Emergency.BD.Datos.Entity.TipoEstado", "TipoEstados")
-                        .WithMany("TipoEstadoEventos")
-                        .HasForeignKey("TipoEstadoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Eventos");
-
-                    b.Navigation("TipoEstados");
-                });
-
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.UsuarioRol", b =>
-                {
-                    b.HasOne("Emergency.BD.Datos.Entity.Rol", "Rols")
-                        .WithMany("UsuarioRols")
-                        .HasForeignKey("RolId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Emergency.BD.Datos.Entity.Usuario", "Usuarios")
-                        .WithMany("UsuarioRols")
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Rols");
-
-                    b.Navigation("Usuarios");
-                });
-
             modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.EventoUsuario", b =>
                 {
-                    b.HasOne("Emergency.BD.Datos.Entity.Evento", "Eventos")
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Evento", "Eventos")
                         .WithMany("EventoUsuarios")
                         .HasForeignKey("EventoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Emergency.BD.Datos.Entity.Usuario", "Usuarios")
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Usuario", "Usuarios")
                         .WithMany("EventoUsuarios")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -708,7 +605,7 @@ namespace G1Emergency2025.BD.Migrations
 
             modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Historico", b =>
                 {
-                    b.HasOne("Emergency.BD.Datos.Entity.Movil", "Movil")
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Movil", "Movil")
                         .WithMany()
                         .HasForeignKey("MovilId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -725,9 +622,93 @@ namespace G1Emergency2025.BD.Migrations
                     b.Navigation("Tripulantes");
                 });
 
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.MovilEvento", b =>
+                {
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Evento", "Eventos")
+                        .WithMany("MovilEventos")
+                        .HasForeignKey("EventoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Movil", "Movils")
+                        .WithMany("MovilEventos")
+                        .HasForeignKey("MovilId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Eventos");
+
+                    b.Navigation("Movils");
+                });
+
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.PacienteEvento", b =>
+                {
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Evento", "Eventos")
+                        .WithMany("PacienteEventos")
+                        .HasForeignKey("EventoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Paciente", "Pacientes")
+                        .WithMany("PacienteEventos")
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Eventos");
+
+                    b.Navigation("Pacientes");
+                });
+
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Persona", b =>
+                {
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Paciente", "Paciente")
+                        .WithOne("Persona")
+                        .HasForeignKey("G1Emergency2025.BD.Datos.Entity.Persona", "PacienteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Tripulante", "Tripulantes")
+                        .WithOne("Persona")
+                        .HasForeignKey("G1Emergency2025.BD.Datos.Entity.Persona", "TripulanteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Usuario", "Usuario")
+                        .WithOne("Persona")
+                        .HasForeignKey("G1Emergency2025.BD.Datos.Entity.Persona", "UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Paciente");
+
+                    b.Navigation("Tripulantes");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.TipoEstadoEvento", b =>
+                {
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Evento", "Eventos")
+                        .WithMany("TipoEstadoEventos")
+                        .HasForeignKey("EventoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.TipoEstado", "TipoEstados")
+                        .WithMany("TipoEstadoEventos")
+                        .HasForeignKey("TipoEstadoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Eventos");
+
+                    b.Navigation("TipoEstados");
+                });
+
             modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.TripulacionActual", b =>
                 {
-                    b.HasOne("Emergency.BD.Datos.Entity.Movil", "Movils")
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Movil", "Movils")
                         .WithMany()
                         .HasForeignKey("MovilId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -747,7 +728,7 @@ namespace G1Emergency2025.BD.Migrations
             modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Tripulante", b =>
                 {
                     b.HasOne("G1Emergency2025.BD.Datos.Entity.TipoTripulante", "TipoTripulantes")
-                        .WithMany()
+                        .WithMany("Tripulantes")
                         .HasForeignKey("TipoTripulanteId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -755,7 +736,26 @@ namespace G1Emergency2025.BD.Migrations
                     b.Navigation("TipoTripulantes");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.Evento", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.UsuarioRol", b =>
+                {
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Rol", "Rols")
+                        .WithMany("UsuarioRols")
+                        .HasForeignKey("RolId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Usuario", "Usuarios")
+                        .WithMany("UsuarioRols")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Rols");
+
+                    b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Evento", b =>
                 {
                     b.Navigation("EventoLugarHechos");
 
@@ -768,45 +768,50 @@ namespace G1Emergency2025.BD.Migrations
                     b.Navigation("TipoEstadoEventos");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.LugarHecho", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.LugarHecho", b =>
                 {
                     b.Navigation("EventoLugarHechos");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.Movil", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Movil", b =>
                 {
                     b.Navigation("MovilEventos");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.Paciente", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Paciente", b =>
                 {
                     b.Navigation("PacienteEventos");
 
                     b.Navigation("Persona");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.Rol", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Rol", b =>
                 {
                     b.Navigation("UsuarioRols");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.TipoEstado", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.TipoEstado", b =>
                 {
                     b.Navigation("TipoEstadoEventos");
                 });
 
-            modelBuilder.Entity("Emergency.BD.Datos.Entity.Usuario", b =>
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.TipoTripulante", b =>
                 {
-                    b.Navigation("EventoUsuarios");
-
-                    b.Navigation("Persona");
-
-                    b.Navigation("UsuarioRols");
+                    b.Navigation("Tripulantes");
                 });
 
             modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Tripulante", b =>
                 {
                     b.Navigation("Persona");
+                });
+
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Usuario", b =>
+                {
+                    b.Navigation("EventoUsuarios");
+
+                    b.Navigation("Persona");
+
+                    b.Navigation("UsuarioRols");
                 });
 #pragma warning restore 612, 618
         }

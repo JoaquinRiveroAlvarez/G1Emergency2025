@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Emergency.BD.Datos.Entity
+namespace G1Emergency2025.BD.Datos.Entity
 {
     public class PacienteEvento
     {
