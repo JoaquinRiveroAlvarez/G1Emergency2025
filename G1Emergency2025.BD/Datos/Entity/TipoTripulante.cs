@@ -19,6 +19,6 @@ namespace G1Emergency2025.BD.Datos.Entity
         [Required(ErrorMessage = "El tipo es obligatorio")]
         [MaxLength(50, ErrorMessage = "La cantidad Maxima de caracteres es 50")]
         public required string Tipo { get; set; }
-        //public List<Tripulante> Tripulantes { get; set; } = new();
+        public List<Tripulante> Tripulantes { get; set; } = new();
     }
 }
