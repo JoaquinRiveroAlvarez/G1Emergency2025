@@ -1,0 +1,24 @@
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace G1Emergency2025.BD.Datos.Entity
+{
+    [Index(nameof(Codigo), Name = "TipoMovil_UQ", IsUnique = true)]
+    public class TipoMovil
+    {
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "El código es obligatorio")]
+        [MaxLength(2, ErrorMessage = "La cantidad Maxima de caracteres es 2")]
+        public required string Codigo { get; set; }
+
+        [Required(ErrorMessage = "El tipo es obligatorio")]
+        [MaxLength(100, ErrorMessage = "La cantidad Maxima de caracteres es 100")]
+        public required string tipo { get; set; }
+    }
+}
