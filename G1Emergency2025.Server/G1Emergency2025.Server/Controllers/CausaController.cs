@@ -16,7 +16,7 @@ namespace Proyecto2025.Server.Controllers
             this.context = context;
         }
 
-        [HttpGet] //api/TipoProvincia
+        [HttpGet] 
         public async Task<ActionResult<List<Causa>>> GetList()
         {
             var lista = await context.Causas.ToListAsync();
@@ -32,7 +32,7 @@ namespace Proyecto2025.Server.Controllers
             return Ok(lista);
         }
 
-        [HttpGet("Id/{id:int}")]  //api/TipoProvincia/5
+        [HttpGet("Id/{id:int}")] 
         public async Task<ActionResult<Causa>> GetById(int id)
         {
             var tipoProvincia = await context.Causas.FirstOrDefaultAsync(x => x.Id == id);
@@ -44,7 +44,7 @@ namespace Proyecto2025.Server.Controllers
             return Ok(tipoProvincia);
         }
 
-        [HttpGet("Codigo/{cod}")]  //api/TipoProvincia/PRU
+        [HttpGet("Codigo/{cod}")] 
         public async Task<ActionResult<Causa>> GetByCod(string cod)
         {
             var tipoProvincia = await context.Causas.FirstOrDefaultAsync(x => x.Codigo == cod);
@@ -71,7 +71,7 @@ namespace Proyecto2025.Server.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]  // api/TipoProvincia/6
+        [HttpPut("{id:int}")]  
         public async Task<ActionResult> Put(int id, Causa DTO)
         {
             if (id != DTO.Id)
@@ -88,7 +88,7 @@ namespace Proyecto2025.Server.Controllers
             return Ok($"El registro con el id: {id} fue actualizado correctamente.");
         }
 
-        [HttpDelete("{id:int}")]  // api/TipoProvincia/6
+        [HttpDelete("{id:int}")] 
         public async Task<ActionResult> Delete(int id)
         {
             var tipoProvincia = await context.Causas.FirstOrDefaultAsync(x => x.Id == id);
@@ -100,38 +100,5 @@ namespace Proyecto2025.Server.Controllers
             await context.SaveChangesAsync();
             return Ok($"El registro con el id: {id} fue eliminado correctamente.");
         }
-
-        //[HttpPut("{cod}")]  // api/TipoProvincia/6
-        //public async Task<ActionResult> PutByCod(string cod, Producto DTO)
-        //{
-        //    if (cod != DTO.CodProducto)
-        //    {
-        //        return BadRequest("Datos no validos.");
-        //    }
-        //    var existe = await context.Productos.AnyAsync(x => x.CodProducto == cod);
-        //    if (!existe)
-        //    {
-        //        return NotFound($"No existe el tipo de provincia con el id: {cod}.");
-        //    }
-        //    context.Update(DTO);
-        //    await context.SaveChangesAsync();
-        //    return Ok($"Tipo de provincia con el id: {cod} actualizado correctamente.");
-        //}
-
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteTipoProvincia(int id)
-        //{
-        //    var tipoProvincia = await context.TipoProvincias.FindAsync(id);
-
-        //    if (tipoProvincia == null)
-        //        return NotFound();
-
-        //    tipoProvincia.EstadoRegistro = EnumEstadoRegistro.inactivo;
-
-        //    context.TipoProvincias.Update(tipoProvincia);
-        //    await context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
     }
 }
