@@ -44,7 +44,6 @@ namespace G1Emergency2025.BD.Datos
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // Aquí puedes configurar tus entidades y relaciones
 
             modelBuilder.Entity<PacienteEvento>()
                 .HasKey(pp => new { pp.PacienteId, pp.EventoId });
