@@ -1,8 +1,11 @@
+using G1Emergency2025.Shared.Enum;
+using G1Emergency2025.BD.Datos.Entity;
+using G1Emergency2025.BD.Datos;
+using G1Emergency2025.Repositorio.Repositorios;
 using G1Emergency2025.Server.Client.Pages;
 using G1Emergency2025.Server.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using G1Emergency2025.BD.Datos;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +29,8 @@ var StrConn = builder.Configuration.GetConnectionString("ConSql")
                                     "El string de conexion no existe.");
 builder.Services.AddDbContext<AppDbContext>(options =>
               options.UseSqlServer(StrConn));
+
+builder.Services.AddScoped<IRepositorio<Causa>, Repositorio<Causa>>();
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()

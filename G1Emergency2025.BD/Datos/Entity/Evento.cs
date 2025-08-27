@@ -1,4 +1,4 @@
-﻿using G1Emergency2025.BD.Datos.Enum;
+﻿using G1Emergency2025.Shared.Enum;
 using G1Emergency2025.BD.Datos.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,9 +12,8 @@ namespace G1Emergency2025.BD.Datos.Entity
 {
     [Index(nameof(Codigo), Name = "Evento_UQ", IsUnique =true)]
 
-    public class Evento
+    public class Evento : EntityBase
     {
-        public int Id { get; set; }
 
         [Required(ErrorMessage = "El código es obligatorio")]
         public required string Codigo { get; set; }

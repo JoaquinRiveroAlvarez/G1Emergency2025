@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 namespace G1Emergency2025.BD.Datos.Entity
 {
     [Index(nameof(Codigo), Name = "TipoTripulante_UQ", IsUnique = true)]
-    public class TipoTripulante
+    public class TipoTripulante : EntityBase
     {
-        public int Id { get; set; }
         [Required(ErrorMessage = "El Código es obligatorio.")]
         [MaxLength(2, ErrorMessage = "La cantidad Maxima de caracteres es 2")]
         public required string Codigo { get; set; }

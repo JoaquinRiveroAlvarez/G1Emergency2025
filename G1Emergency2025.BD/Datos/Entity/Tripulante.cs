@@ -1,4 +1,4 @@
-﻿using G1Emergency2025.BD.Datos.Entity;
+﻿using G1Emergency2025.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace G1Emergency2025.BD.Datos.Entity
 {
-    public class Tripulante
+    public class Tripulante : EntityBase
     {
-        public int Id { get; set; }
 
         [Required(ErrorMessage = "Si esta en el movil es obligatorio")]
         public required bool EnMovil { get; set; } 

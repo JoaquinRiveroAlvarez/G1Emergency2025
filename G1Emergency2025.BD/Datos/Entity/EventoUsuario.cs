@@ -1,4 +1,4 @@
-﻿using G1Emergency2025.BD.Datos.Entity;
+﻿using G1Emergency2025.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;

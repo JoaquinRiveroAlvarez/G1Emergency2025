@@ -1,4 +1,4 @@
-﻿using G1Emergency2025.BD.Datos.Enum;
+﻿using G1Emergency2025.Shared.Enum;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,9 +10,8 @@ using System.Threading.Tasks;
 namespace G1Emergency2025.BD.Datos.Entity
 {
     [Index(nameof(Patente), Name = "Patente_UQ", IsUnique = true)]
-    public class Movil
+    public class Movil : EntityBase
     {
-        public int Id { get; set; }
 
         [Required(ErrorMessage = "La disponibilidad es obligatoria.")]
         public DisponibilidadMovil disponibilidadMovil { get; set; } = DisponibilidadMovil.libre;

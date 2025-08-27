@@ -1,4 +1,4 @@
-﻿using G1Emergency2025.BD.Datos.Entity;
+﻿using G1Emergency2025.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace G1Emergency2025.BD.Datos.Entity
 {
-    public class TripulacionActual
+    public class TripulacionActual : EntityBase
     {
-        public int Id { get; set; }
 
         [Required(ErrorMessage = "La Fecha de entrada es obligatoria")]
         [MaxLength(50, ErrorMessage = "La cantidad Maxima de caracteres es 50")]

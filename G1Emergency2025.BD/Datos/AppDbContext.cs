@@ -1,4 +1,5 @@
-﻿using G1Emergency2025.BD.Datos.Entity;
+﻿using G1Emergency2025.Shared.Enum;
+using G1Emergency2025.BD.Datos.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

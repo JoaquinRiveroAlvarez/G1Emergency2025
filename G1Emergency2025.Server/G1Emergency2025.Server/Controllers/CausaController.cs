@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using G1Emergency2025.BD.Datos;
+﻿using G1Emergency2025.BD.Datos;
 using G1Emergency2025.BD.Datos.Entity;
+using G1Emergency2025.Repositorio.Repositorios;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Proyecto2025.Server.Controllers
 {
@@ -10,16 +11,18 @@ namespace Proyecto2025.Server.Controllers
     public class CausaController : ControllerBase
     {
         private readonly AppDbContext context;
-
-        public CausaController(AppDbContext context)
+        private readonly IRepositorio<Causa> repositorio;
+        public CausaController(AppDbContext context,
+                               IRepositorio<Causa> repositorio)
         {
             this.context = context;
+            this.repositorio = repositorio;
         }
 
         [HttpGet] 
         public async Task<ActionResult<List<Causa>>> GetList()
         {
-            var lista = await context.Causas.ToListAsync();
+            var lista = await repositorio.Select();
             if (lista == null)
             {
                 return NotFound("No se encontro la lista, VERIFICAR.");
@@ -35,7 +38,7 @@ namespace Proyecto2025.Server.Controllers
         [HttpGet("Id/{id:int}")] 
         public async Task<ActionResult<Causa>> GetById(int id)
         {
-            var tipoProvincia = await context.Causas.FirstOrDefaultAsync(x => x.Id == id);
+            var tipoProvincia = await repositorio.SelectById(id);
             if (tipoProvincia is null)
             {
                 return NotFound($"No existe el registro con el id: {id}.");
@@ -60,8 +63,8 @@ namespace Proyecto2025.Server.Controllers
         public async Task<ActionResult<int>> Post(Causa DTO)
         {
             try
-            {                
-                await context.Causas.AddAsync(DTO);
+            {
+                await repositorio.Insert(DTO);
                 await context.SaveChangesAsync();
                 return Ok(DTO.Id);
             }
@@ -74,30 +77,30 @@ namespace Proyecto2025.Server.Controllers
         [HttpPut("{id:int}")]  
         public async Task<ActionResult> Put(int id, Causa DTO)
         {
-            if (id != DTO.Id)
+            var resultado = await repositorio.Update(id, DTO);
+            if (!resultado)
             {
-                return BadRequest("Datos no validos.");
+                return BadRequest("Datos no validos");
             }
-            var existe = await context.Causas.AnyAsync(x => x.Id == id);
-            if (!existe)
-            {
-                return NotFound($"No existe el registro con el id: {id}.");
-            }
-            context.Update(DTO);
-            await context.SaveChangesAsync();
             return Ok($"El registro con el id: {id} fue actualizado correctamente.");
         }
 
         [HttpDelete("{id:int}")] 
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id, Causa causa)
         {
-            var tipoProvincia = await context.Causas.FirstOrDefaultAsync(x => x.Id == id);
-            if (tipoProvincia is null)
+            //var tipoProvincia = await context.Causas.FirstOrDefaultAsync(x => x.Id == id);
+            //if (tipoProvincia is null)
+            //{
+            //    return NotFound($"No existe el registro con el id: {id}.");
+            //}
+            //context.Causas.Remove(tipoProvincia);
+            //await context.SaveChangesAsync();
+            //return Ok($"El registro con el id: {id} fue eliminado correctamente.");
+            var resultado = await repositorio.Delete(id, causa);
+            if (!resultado)
             {
-                return NotFound($"No existe el registro con el id: {id}.");
+                return BadRequest("Datos no validos");
             }
-            context.Causas.Remove(tipoProvincia);
-            await context.SaveChangesAsync();
             return Ok($"El registro con el id: {id} fue eliminado correctamente.");
         }
     }

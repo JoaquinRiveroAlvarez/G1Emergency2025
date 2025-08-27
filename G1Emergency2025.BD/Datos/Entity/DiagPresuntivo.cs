@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace G1Emergency2025.BD.Datos.Entity
 {
-    public class DiagPresuntivo
+    public class DiagPresuntivo : EntityBase
     {
-        public int Id { get; set; }
 
         [Required(ErrorMessage = "El Diagnostico presuntivo es obligatorio.")]
         [MaxLength(100, ErrorMessage = "La cantidad Maxima de caracteres es 100")]

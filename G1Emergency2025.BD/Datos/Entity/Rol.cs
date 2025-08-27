@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 namespace G1Emergency2025.BD.Datos.Entity
 {
     [Index(nameof(Codigo), Name = "Codigo_UQ", IsUnique = true)]
-    public class Rol
+    public class Rol : EntityBase
     {
-        public int Id { get; set; }
 
         [Required(ErrorMessage = "El Código es obligatorio.")]
         [MaxLength(3, ErrorMessage = "El Código no puede exceder los 3 caracteres.")]

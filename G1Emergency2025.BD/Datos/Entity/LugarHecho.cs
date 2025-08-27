@@ -10,9 +10,8 @@ namespace G1Emergency2025.BD.Datos.Entity
 {
     [Index(nameof(Codigo), Name = "LugarHecho_UQ", IsUnique = true)]
 
-    public class LugarHecho
+    public class LugarHecho : EntityBase
     {
-        public int Id { get; set; }
 
         [Required(ErrorMessage = "El código es obligatorio")]
         [MaxLength(100, ErrorMessage = "La cantidad Maxima de caracteres es 100")]

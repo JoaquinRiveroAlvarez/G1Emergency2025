@@ -1,4 +1,4 @@
-﻿using G1Emergency2025.BD.Datos.Entity;
+﻿using G1Emergency2025.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace G1Emergency2025.BD.Datos.Entity
 {
-    public class Usuario
+    public class Usuario : EntityBase
     {
-        public int Id { get; set; }
 
         [Required(ErrorMessage = "El Nombre es obligatorio.")]
         [MaxLength(50, ErrorMessage = "El Nombre no puede exceder los 50 caracteres.")]

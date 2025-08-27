@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace G1Emergency2025.BD.Datos.Entity
 {
-    public class Paciente
+    public class Paciente : EntityBase
     {
-        public int Id { get; set; }
 
         [Required(ErrorMessage = "La obra social es obligatoria")]
         [MaxLength(100, ErrorMessage = "La cantidad Maxima de caracteres es 50")]
