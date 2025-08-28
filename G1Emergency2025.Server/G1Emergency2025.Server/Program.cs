@@ -32,6 +32,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IRepositorio<Causa>, Repositorio<Causa>>();
 
+builder.Services.AddScoped<IRepositorio<DiagPresuntivo>, DiagPresuntivoRepositorio<DiagPresuntivo>>();
+
+
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();

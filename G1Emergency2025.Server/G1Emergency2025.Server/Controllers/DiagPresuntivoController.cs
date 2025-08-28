@@ -7,20 +7,20 @@ using Microsoft.EntityFrameworkCore;
 namespace Proyecto2025.Server.Controllers
 {
     [ApiController]
-    [Route("api/Causa")]
-    public class CausaController : ControllerBase
+    [Route("api/DiagPresuntivo")]
+    public class DiagPresuntivoController : ControllerBase
     {
         private readonly AppDbContext context;
-        private readonly IRepositorio<Causa> repositorio;
-        public CausaController(AppDbContext context,
-                               IRepositorio<Causa> repositorio)
+        private readonly IRepositorio<DiagPresuntivo> repositorio;
+        public DiagPresuntivoController(AppDbContext context,
+                               IRepositorio<DiagPresuntivo> repositorio)
         {
             this.context = context;
             this.repositorio = repositorio;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<Causa>>> GetList()
+        [HttpGet] 
+        public async Task<ActionResult<List<DiagPresuntivo>>> GetList()
         {
             var lista = await repositorio.Select();
             if (lista == null)
@@ -35,8 +35,8 @@ namespace Proyecto2025.Server.Controllers
             return Ok(lista);
         }
 
-        [HttpGet("Id/{id:int}")]
-        public async Task<ActionResult<Causa>> GetById(int id)
+        [HttpGet("Id/{id:int}")] 
+        public async Task<ActionResult<DiagPresuntivo>> GetById(int id)
         {
             var tipoProvincia = await repositorio.SelectById(id);
             if (tipoProvincia is null)
@@ -47,20 +47,20 @@ namespace Proyecto2025.Server.Controllers
             return Ok(tipoProvincia);
         }
 
-        [HttpGet("Codigo/{cod}")]
-        public async Task<ActionResult<Causa>> GetByCod(string cod)
-        {
-            var tipoProvincia = await context.Causas.FirstOrDefaultAsync(x => x.Codigo == cod);
-            if (tipoProvincia is null)
-            {
-                return NotFound($"No existe el registro con el código: {cod}.");
-            }
+        //[HttpGet("Codigo/{cod}")] 
+        //public async Task<ActionResult<DiagPresuntivo>> GetByCod(string cod)
+        //{
+        //    var tipoProvincia = await context.Causas.FirstOrDefaultAsync(x => x.Codigo == cod);
+        //    if (tipoProvincia is null)
+        //    {
+        //        return NotFound($"No existe el registro con el código: {cod}.");
+        //    }
 
-            return Ok(tipoProvincia);
-        }
+        //    return Ok(tipoProvincia);
+        //}
 
         [HttpPost]
-        public async Task<ActionResult<int>> Post(Causa DTO)
+        public async Task<ActionResult<int>> Post(DiagPresuntivo DTO)
         {
             try
             {
@@ -74,8 +74,8 @@ namespace Proyecto2025.Server.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, Causa DTO)
+        [HttpPut("{id:int}")]  
+        public async Task<ActionResult> Put(int id, DiagPresuntivo DTO)
         {
             var resultado = await repositorio.Update(id, DTO);
             if (!resultado)
@@ -85,8 +85,8 @@ namespace Proyecto2025.Server.Controllers
             return Ok($"El registro con el id: {id} fue actualizado correctamente.");
         }
 
-        [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id, Causa causa)
+        [HttpDelete("{id:int}")] 
+        public async Task<ActionResult> Delete(int id, DiagPresuntivo diagPresuntivo)
         {
             //var tipoProvincia = await context.Causas.FirstOrDefaultAsync(x => x.Id == id);
             //if (tipoProvincia is null)
@@ -96,7 +96,7 @@ namespace Proyecto2025.Server.Controllers
             //context.Causas.Remove(tipoProvincia);
             //await context.SaveChangesAsync();
             //return Ok($"El registro con el id: {id} fue eliminado correctamente.");
-            var resultado = await repositorio.Delete(id, causa);
+            var resultado = await repositorio.Delete(id, diagPresuntivo);
             if (!resultado)
             {
                 return BadRequest("Datos no validos");
