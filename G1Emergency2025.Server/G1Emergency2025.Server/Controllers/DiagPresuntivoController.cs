@@ -10,10 +10,9 @@ namespace Proyecto2025.Server.Controllers
     [Route("api/DiagPresuntivo")]
     public class DiagPresuntivoController : ControllerBase
     {
-        private readonly AppDbContext context;
         private readonly IRepositorio<DiagPresuntivo> repositorio;
-        public DiagPresuntivoController(AppDbContext context,
-                               IRepositorio<DiagPresuntivo> repositorio)
+        private readonly AppDbContext context;
+        public DiagPresuntivoController(IRepositorio<DiagPresuntivo> repositorio, AppDbContext context)
         {
             this.context = context;
             this.repositorio = repositorio;
@@ -47,18 +46,6 @@ namespace Proyecto2025.Server.Controllers
             return Ok(tipoProvincia);
         }
 
-        //[HttpGet("Codigo/{cod}")] 
-        //public async Task<ActionResult<DiagPresuntivo>> GetByCod(string cod)
-        //{
-        //    var tipoProvincia = await context.Causas.FirstOrDefaultAsync(x => x.Codigo == cod);
-        //    if (tipoProvincia is null)
-        //    {
-        //        return NotFound($"No existe el registro con el código: {cod}.");
-        //    }
-
-        //    return Ok(tipoProvincia);
-        //}
-
         [HttpPost]
         public async Task<ActionResult<int>> Post(DiagPresuntivo DTO)
         {
@@ -88,14 +75,6 @@ namespace Proyecto2025.Server.Controllers
         [HttpDelete("{id:int}")] 
         public async Task<ActionResult> Delete(int id, DiagPresuntivo diagPresuntivo)
         {
-            //var tipoProvincia = await context.Causas.FirstOrDefaultAsync(x => x.Id == id);
-            //if (tipoProvincia is null)
-            //{
-            //    return NotFound($"No existe el registro con el id: {id}.");
-            //}
-            //context.Causas.Remove(tipoProvincia);
-            //await context.SaveChangesAsync();
-            //return Ok($"El registro con el id: {id} fue eliminado correctamente.");
             var resultado = await repositorio.Delete(id, diagPresuntivo);
             if (!resultado)
             {

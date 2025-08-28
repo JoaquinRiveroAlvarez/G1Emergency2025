@@ -10,12 +10,9 @@ namespace Proyecto2025.Server.Controllers
     [Route("api/Causa")]
     public class CausaController : ControllerBase
     {
-        private readonly AppDbContext context;
-        private readonly IRepositorio<Causa> repositorio;
-        public CausaController(AppDbContext context,
-                               IRepositorio<Causa> repositorio)
+        private readonly ICausaRepositorio repositorio;
+        public CausaController(ICausaRepositorio repositorio)
         {
-            this.context = context;
             this.repositorio = repositorio;
         }
 
@@ -50,7 +47,7 @@ namespace Proyecto2025.Server.Controllers
         [HttpGet("Codigo/{cod}")]
         public async Task<ActionResult<Causa>> GetByCod(string cod)
         {
-            var tipoProvincia = await context.Causas.FirstOrDefaultAsync(x => x.Codigo == cod);
+            var tipoProvincia = await repositorio.SelectByCod(cod);
             if (tipoProvincia is null)
             {
                 return NotFound($"No existe el registro con el código: {cod}.");
@@ -58,20 +55,21 @@ namespace Proyecto2025.Server.Controllers
 
             return Ok(tipoProvincia);
         }
-
+        //UTILIZA CONTEXT Y NO REPOSITORIO
         [HttpPost]
-        public async Task<ActionResult<int>> Post(Causa DTO)
+        public async Task<ActionResult<int>> Post(Causa causa)
         {
+
             try
             {
-                await repositorio.Insert(DTO);
-                await context.SaveChangesAsync();
-                return Ok(DTO.Id);
+                var id = await repositorio.Insert(causa);
+                return Ok(id);
             }
             catch (Exception e)
             {
                 return BadRequest($"Error al crear el nuevo registro: {e.Message}");
             }
+
         }
 
         [HttpPut("{id:int}")]
@@ -88,14 +86,6 @@ namespace Proyecto2025.Server.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id, Causa causa)
         {
-            //var tipoProvincia = await context.Causas.FirstOrDefaultAsync(x => x.Id == id);
-            //if (tipoProvincia is null)
-            //{
-            //    return NotFound($"No existe el registro con el id: {id}.");
-            //}
-            //context.Causas.Remove(tipoProvincia);
-            //await context.SaveChangesAsync();
-            //return Ok($"El registro con el id: {id} fue eliminado correctamente.");
             var resultado = await repositorio.Delete(id, causa);
             if (!resultado)
             {

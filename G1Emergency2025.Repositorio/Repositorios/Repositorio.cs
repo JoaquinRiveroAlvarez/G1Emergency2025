@@ -26,7 +26,6 @@ namespace G1Emergency2025.Repositorio.Repositorios
 
         public async Task<List<E>> Select()
         {
-            //var lista = await context.Paises.ToListAsync();
             return await context.Set<E>().ToListAsync();
         }
 

@@ -9,7 +9,6 @@ namespace G1Emergency2025.Repositorio.Repositorios
         Task<List<E>> Select();
         Task<E?> SelectById(int id);
         Task<bool> Update(int id, E entidad);
-        
         Task<bool> Delete(int id, E entidad);
     }
 }

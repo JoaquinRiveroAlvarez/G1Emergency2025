@@ -30,7 +30,9 @@ var StrConn = builder.Configuration.GetConnectionString("ConSql")
 builder.Services.AddDbContext<AppDbContext>(options =>
               options.UseSqlServer(StrConn));
 
-builder.Services.AddScoped<IRepositorio<Causa>, Repositorio<Causa>>();
+//builder.Services.AddScoped<CausaRepositorio>();
+//builder.Services.AddScoped<IRepositorio<Causa>, CausaRepositorio<Causa>>();
+builder.Services.AddScoped<ICausaRepositorio, CausaRepositorio>();
 
 builder.Services.AddScoped<IRepositorio<DiagPresuntivo>, DiagPresuntivoRepositorio<DiagPresuntivo>>();
 
