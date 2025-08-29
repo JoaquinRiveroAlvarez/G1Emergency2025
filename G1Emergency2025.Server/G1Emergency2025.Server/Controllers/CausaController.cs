@@ -55,7 +55,6 @@ namespace Proyecto2025.Server.Controllers
 
             return Ok(tipoProvincia);
         }
-        //UTILIZA CONTEXT Y NO REPOSITORIO
         [HttpPost]
         public async Task<ActionResult<int>> Post(Causa causa)
         {

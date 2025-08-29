@@ -11,10 +11,8 @@ namespace Proyecto2025.Server.Controllers
     public class DiagPresuntivoController : ControllerBase
     {
         private readonly IRepositorio<DiagPresuntivo> repositorio;
-        private readonly AppDbContext context;
-        public DiagPresuntivoController(IRepositorio<DiagPresuntivo> repositorio, AppDbContext context)
+        public DiagPresuntivoController(IRepositorio<DiagPresuntivo> repositorio)
         {
-            this.context = context;
             this.repositorio = repositorio;
         }
 
@@ -47,13 +45,12 @@ namespace Proyecto2025.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Post(DiagPresuntivo DTO)
+        public async Task<ActionResult<int>> Post(DiagPresuntivo diagPresuntivo)
         {
             try
             {
-                await repositorio.Insert(DTO);
-                await context.SaveChangesAsync();
-                return Ok(DTO.Id);
+                var id = await repositorio.Insert(diagPresuntivo);
+                return Ok(id);
             }
             catch (Exception e)
             {
