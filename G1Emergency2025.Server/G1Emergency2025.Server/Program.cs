@@ -42,10 +42,17 @@ builder.Services.AddScoped(sp => new HttpClient
 
 //builder.Services.AddScoped<CausaRepositorio>();
 //builder.Services.AddScoped<IRepositorio<Causa>, CausaRepositorio<Causa>>();
+
 builder.Services.AddScoped<ICausaRepositorio, CausaRepositorio>();
 
-builder.Services.AddScoped<IDiagPresuntivoRepositorio, DiagPresuntivoRepositorio>();
-//builder.Services.AddScoped<IRepositorio<DiagPresuntivo>,Repositorio<DiagPresuntivo>>();
+//Zoe
+builder.Services.AddScoped<ITipoTripulanteRepositorio, TipoTripulanteRepositorio>();
+builder.Services.AddScoped<ITipoMovilRepositorio, TipoMovilRepositorio>();
+builder.Services.AddScoped<ITripulacionActualRepositorio, TripulacionActualRepositorio>();
+builder.Services.AddScoped<ITripulanteRepositorio, TripulanteRepositorio>();
+builder.Services.AddScoped<IHistoricoRepositorio, HistoricoRepositorio>();
+//Fin Zoe
+//builder.Services.AddScoped<IRepositorio<DiagPresuntivo>, DiagPresuntivoRepositorio<DiagPresuntivo>>();
 
 
 
