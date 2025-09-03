@@ -13,10 +13,8 @@ namespace G1Emergency2025.BD.Datos.Entity
 
         [Required(ErrorMessage = "Si esta en el movil es obligatorio")]
         public required bool EnMovil { get; set; } 
-        public Persona? Persona { get; set; }
-
-        public int TipoTripulanteId { get; set; }
-        public TipoTripulante? TipoTripulantes { get; set; }
+        public int PersonaId { get; set; }
+        public Persona? Personas { get; set; }
 
     }
 }

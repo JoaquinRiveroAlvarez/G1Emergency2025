@@ -1,6 +1,7 @@
 ﻿using G1Emergency2025.BD.Datos;
 using G1Emergency2025.BD.Datos.Entity;
 using G1Emergency2025.Repositorio.Repositorios;
+using G1Emergency2025.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,13 +11,14 @@ namespace Proyecto2025.Server.Controllers
     [Route("api/DiagPresuntivo")]
     public class DiagPresuntivoController : ControllerBase
     {
-        private readonly IRepositorio<DiagPresuntivo> repositorio;
-        public DiagPresuntivoController(IRepositorio<DiagPresuntivo> repositorio)
+        private readonly IDiagPresuntivoRepositorio repositorio;
+
+        public DiagPresuntivoController(IDiagPresuntivoRepositorio repositorio)
         {
             this.repositorio = repositorio;
         }
 
-        [HttpGet] 
+        [HttpGet]
         public async Task<ActionResult<List<DiagPresuntivo>>> GetList()
         {
             var lista = await repositorio.Select();
@@ -31,6 +33,21 @@ namespace Proyecto2025.Server.Controllers
 
             return Ok(lista);
         }
+        //[HttpGet]
+        //public async Task<ActionResult<List<DiagPresuntivoDTO>>> ListadoDiagPresuntivo()
+        //{
+        //    var lista = await repositorio.SelectListaDiagnosticos();
+        //    if (lista == null)
+        //    {
+        //        return NotFound("No se encontro la lista, VERIFICAR.");
+        //    }
+        //    if (lista.Count == 0)
+        //    {
+        //        return Ok("No existen items en la lista en este momento");
+        //    }
+
+        //    return Ok(lista);
+        //}
 
         [HttpGet("Id/{id:int}")] 
         public async Task<ActionResult<DiagPresuntivo>> GetById(int id)

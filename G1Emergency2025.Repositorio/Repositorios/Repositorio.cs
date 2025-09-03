@@ -1,4 +1,5 @@
 ﻿using G1Emergency2025.BD.Datos;
+using G1Emergency2025.Shared.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
@@ -38,6 +39,7 @@ namespace G1Emergency2025.Repositorio.Repositorios
         {
             try
             {
+                entidad.EstadoRegistro = EnumEstadoRegistro.activo;
                 await context.Set<E>().AddAsync(entidad);
                 await context.SaveChangesAsync();
                 return entidad.Id;

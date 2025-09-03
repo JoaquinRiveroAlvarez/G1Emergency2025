@@ -32,11 +32,5 @@ namespace G1Emergency2025.BD.Datos.Entity
         [Required(ErrorMessage = "La edad es obligatoria.")]
         [MaxLength(50, ErrorMessage = "La edad no puede exceder los 3 caracteres.")]
         public required string Edad { get; set; }
-        public int PacienteId { get; set; }
-        public Paciente? Paciente { get; set; }
-        public int UsuarioId { get; set; }
-        public Usuario? Usuario { get; set; }
-        public int TripulanteId{ get; set; }
-        public Tripulante? Tripulantes { get; set; }
     }
 }

@@ -283,7 +283,12 @@ namespace G1Emergency2025.BD.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PersonaId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("PersonaId");
 
                     b.ToTable("Pacientes");
                 });
@@ -340,29 +345,11 @@ namespace G1Emergency2025.BD.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PacienteId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Sexo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TripulanteId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PacienteId")
-                        .IsUnique();
-
-                    b.HasIndex("TripulanteId")
-                        .IsUnique();
-
-                    b.HasIndex("UsuarioId")
-                        .IsUnique();
 
                     b.ToTable("Personas");
                 });
@@ -548,10 +535,15 @@ namespace G1Emergency2025.BD.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TipoTripulanteId")
+                    b.Property<int>("PersonaId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TipoTripulanteId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PersonaId");
 
                     b.HasIndex("TipoTripulanteId");
 
@@ -580,7 +572,12 @@ namespace G1Emergency2025.BD.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PersonaId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("PersonaId");
 
                     b.ToTable("Usuarios");
                 });
@@ -698,6 +695,17 @@ namespace G1Emergency2025.BD.Migrations
                     b.Navigation("Movils");
                 });
 
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Paciente", b =>
+                {
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Persona", "Personas")
+                        .WithMany()
+                        .HasForeignKey("PersonaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Personas");
+                });
+
             modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.PacienteEvento", b =>
                 {
                     b.HasOne("G1Emergency2025.BD.Datos.Entity.Evento", "Eventos")
@@ -715,33 +723,6 @@ namespace G1Emergency2025.BD.Migrations
                     b.Navigation("Eventos");
 
                     b.Navigation("Pacientes");
-                });
-
-            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Persona", b =>
-                {
-                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Paciente", "Paciente")
-                        .WithOne("Persona")
-                        .HasForeignKey("G1Emergency2025.BD.Datos.Entity.Persona", "PacienteId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Tripulante", "Tripulantes")
-                        .WithOne("Persona")
-                        .HasForeignKey("G1Emergency2025.BD.Datos.Entity.Persona", "TripulanteId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Usuario", "Usuario")
-                        .WithOne("Persona")
-                        .HasForeignKey("G1Emergency2025.BD.Datos.Entity.Persona", "UsuarioId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Paciente");
-
-                    b.Navigation("Tripulantes");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.TipoEstadoEvento", b =>
@@ -784,13 +765,28 @@ namespace G1Emergency2025.BD.Migrations
 
             modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Tripulante", b =>
                 {
-                    b.HasOne("G1Emergency2025.BD.Datos.Entity.TipoTripulante", "TipoTripulantes")
-                        .WithMany("Tripulantes")
-                        .HasForeignKey("TipoTripulanteId")
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Persona", "Personas")
+                        .WithMany()
+                        .HasForeignKey("PersonaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("TipoTripulantes");
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.TipoTripulante", null)
+                        .WithMany("Tripulantes")
+                        .HasForeignKey("TipoTripulanteId");
+
+                    b.Navigation("Personas");
+                });
+
+            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Usuario", b =>
+                {
+                    b.HasOne("G1Emergency2025.BD.Datos.Entity.Persona", "Personas")
+                        .WithMany()
+                        .HasForeignKey("PersonaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Personas");
                 });
 
             modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.UsuarioRol", b =>
@@ -838,8 +834,6 @@ namespace G1Emergency2025.BD.Migrations
             modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Paciente", b =>
                 {
                     b.Navigation("PacienteEventos");
-
-                    b.Navigation("Persona");
                 });
 
             modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Rol", b =>
@@ -857,16 +851,9 @@ namespace G1Emergency2025.BD.Migrations
                     b.Navigation("Tripulantes");
                 });
 
-            modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Tripulante", b =>
-                {
-                    b.Navigation("Persona");
-                });
-
             modelBuilder.Entity("G1Emergency2025.BD.Datos.Entity.Usuario", b =>
                 {
                     b.Navigation("EventoUsuarios");
-
-                    b.Navigation("Persona");
 
                     b.Navigation("UsuarioRols");
                 });

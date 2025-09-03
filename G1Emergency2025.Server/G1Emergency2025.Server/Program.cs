@@ -30,11 +30,22 @@ var StrConn = builder.Configuration.GetConnectionString("ConSql")
 builder.Services.AddDbContext<AppDbContext>(options =>
               options.UseSqlServer(StrConn));
 
+//CONEXION BLAZOR CON API
+
+builder.Services.AddScoped(sp => new HttpClient
+{
+    BaseAddress = new Uri("https://localhost:7150/") // tu URL de la API
+});
+
+
+//REPOSITORIOS
+
 //builder.Services.AddScoped<CausaRepositorio>();
 //builder.Services.AddScoped<IRepositorio<Causa>, CausaRepositorio<Causa>>();
 builder.Services.AddScoped<ICausaRepositorio, CausaRepositorio>();
 
-builder.Services.AddScoped<IRepositorio<DiagPresuntivo>, DiagPresuntivoRepositorio<DiagPresuntivo>>();
+builder.Services.AddScoped<IDiagPresuntivoRepositorio, DiagPresuntivoRepositorio>();
+//builder.Services.AddScoped<IRepositorio<DiagPresuntivo>,Repositorio<DiagPresuntivo>>();
 
 
 

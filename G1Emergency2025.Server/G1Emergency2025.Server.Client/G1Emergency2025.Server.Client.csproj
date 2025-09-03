@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\G1Emergency2025.BD\G1Emergency2025.BD.csproj" />
     <ProjectReference Include="..\..\G1Emergency2025.Servicio\G1Emergency2025.Servicio.csproj" />
     <ProjectReference Include="..\..\G1Emergency2025.Shared\G1Emergency2025.Shared.csproj" />
   </ItemGroup>

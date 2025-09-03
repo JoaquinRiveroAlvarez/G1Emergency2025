@@ -18,7 +18,8 @@ namespace G1Emergency2025.BD.Datos.Entity
         [Required(ErrorMessage = "El Código es obligatorio.")]
         [MaxLength(10, ErrorMessage = "El Código no puede exceder los 4 caracteres.")]
         public required string Contrasena { get; set; }
-        public Persona? Persona { get; set; }
+        public int PersonaId { get; set; }
+        public Persona? Personas{ get; set; }
         public List<EventoUsuario> EventoUsuarios { get; set; } = new();
         public List<UsuarioRol> UsuarioRols { get; set; } = new();
     }
