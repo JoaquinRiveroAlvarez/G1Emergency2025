@@ -1,9 +1,10 @@
-using G1Emergency2025.Shared.Enum;
-using G1Emergency2025.BD.Datos.Entity;
 using G1Emergency2025.BD.Datos;
+using G1Emergency2025.BD.Datos.Entity;
+using G1Emergency2025.Repositorio.IRepositorios;
 using G1Emergency2025.Repositorio.Repositorios;
 using G1Emergency2025.Server.Client.Pages;
 using G1Emergency2025.Server.Components;
+using G1Emergency2025.Shared.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System;
@@ -54,6 +55,17 @@ builder.Services.AddScoped<IHistoricoRepositorio, HistoricoRepositorio>();
 //Fin Zoe
 //builder.Services.AddScoped<IRepositorio<DiagPresuntivo>, DiagPresuntivoRepositorio<DiagPresuntivo>>();
 
+//Emi
+builder.Services.AddScoped<IRepositorio<Usuario>, Repositorio<Usuario>>();
+
+builder.Services.AddScoped<IRepositorio<Paciente>, Repositorio<Paciente>>();
+
+builder.Services.AddScoped<IRepositorio<Persona>, Repositorio<Persona>>();
+builder.Services.AddScoped<IPersonaRepositorio, PersonaRepositorio>();
+
+builder.Services.AddScoped<IRepositorio<Rol>, Repositorio<Rol>>();
+builder.Services.AddScoped<IRolRepositorio, RolRepositorio>();
+//Fin Emi
 
 
 builder.Services.AddRazorComponents()

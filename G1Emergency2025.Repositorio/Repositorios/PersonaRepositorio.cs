@@ -1,0 +1,30 @@
+﻿using G1Emergency2025.BD.Datos;
+using G1Emergency2025.BD.Datos.Entity;
+using G1Emergency2025.Repositorio.IRepositorios;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+
+namespace G1Emergency2025.Repositorio.Repositorios
+{
+    public class PersonaRepositorio : Repositorio<Persona>, IPersonaRepositorio
+    {
+        private readonly AppDbContext context;
+
+        public PersonaRepositorio(AppDbContext context) : base(context)
+        {
+            this.context = context;
+        }
+        public async Task<Persona?> SelectByDni(string dni)
+        {
+            return await context.Set<Persona>().FirstOrDefaultAsync(x => x.DNI == dni);
+        }
+
+        
+    }
+}
