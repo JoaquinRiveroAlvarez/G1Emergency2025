@@ -9,16 +9,17 @@ namespace G1Emergency2025.Shared.DTO
 {
     public class LugarHechoDTO
     {
+        public int Id { get; set; }
         [Required(ErrorMessage = "El código es obligatorio")]
         [MaxLength(100, ErrorMessage = "La cantidad Maxima de caracteres es 100")]
-        public required string Codigo { get; set; }
+        public string Codigo { get; set; }
 
         [Required(ErrorMessage = "El tipo es obligatorio")]
         [MaxLength(100, ErrorMessage = "La cantidad Maxima de caracteres es 100")]
-        public required string Tipo { get; set; }
+        public string Tipo { get; set; }
 
         [Required(ErrorMessage = "La descripcion del lugar del hecho es obligatoria")]
         [MaxLength(100, ErrorMessage = "La cantidad Maxima de caracteres es 100")]
-        public required string Descripcion { get; set; }
+        public string Descripcion { get; set; }
     }
 }

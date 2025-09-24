@@ -19,6 +19,8 @@ namespace G1Emergency2025.BD.Datos.Entity
         [Required(ErrorMessage = "La patente es obligatoria.")]
         [MaxLength(50, ErrorMessage = "La patente no puede exceder los 50 caracteres.")]
         public required string Patente { get; set; }
+        public int TipoMovilId { get; set; }
+        public TipoMovil? TipoMovils { get; set; }
         public int EventoId { get; set; }
         public Evento? Evento { get; set; }
     }

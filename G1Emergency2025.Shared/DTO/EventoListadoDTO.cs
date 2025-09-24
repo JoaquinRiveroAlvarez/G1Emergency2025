@@ -10,5 +10,8 @@ namespace G1Emergency2025.Shared.DTO
     {
         public int Id { get; set; }
         public string Evento { get; set; } = string.Empty;
+        public List<PacienteDTO> Pacientes { get; set; } = new();
+        public List<UsuarioDTO> Usuarios { get; set; } = new();
+        public List<LugarHechoDTO> Lugares { get; set; } = new();
     }
 }

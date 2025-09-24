@@ -34,10 +34,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 //CONEXION BLAZOR CON API
 
-builder.Services.AddScoped(sp => new HttpClient
-{
-    BaseAddress = new Uri("https://localhost:7150/") // tu URL de la API
-});
+//builder.Services.AddScoped(sp => new HttpClient
+//{
+//    BaseAddress = new Uri("https://localhost:7150/") // tu URL de la API
+//});
 
 
 //REPOSITORIOS
@@ -48,6 +48,7 @@ builder.Services.AddScoped<IDiagPresuntivoRepositorio, DiagPresuntivoRepositorio
 builder.Services.AddScoped<ILugarHechoRepositorio, LugarHechoRepositorio>();
 builder.Services.AddScoped<ITipoEstadoRepositorio, TipoEstadoRepositorio>();
 builder.Services.AddScoped<IMovilRepositorio, MovilRepositorio>();
+builder.Services.AddScoped<IEventoRepositorio, EventoRepositorio>();
 
 //ZOE
 builder.Services.AddScoped<IHistoricoRepositorio, HistoricoRepositorio>();

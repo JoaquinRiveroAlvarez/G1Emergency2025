@@ -10,6 +10,7 @@ namespace G1Emergency2025.Shared.DTO
 {
     public class EventoDTO
     {
+        public int Id { get; set; }
         [Required(ErrorMessage = "El código es obligatorio")]
         public required string Codigo { get; set; }
 

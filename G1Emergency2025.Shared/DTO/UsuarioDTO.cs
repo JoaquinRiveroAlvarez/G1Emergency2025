@@ -9,13 +9,14 @@ namespace G1Emergency2025.Shared.DTO
 {
     public class UsuarioDTO 
     {
+        public int Id { get; set; }
         [Required(ErrorMessage = "El Nombre es obligatorio.")]
         [MaxLength(50, ErrorMessage = "El Nombre no puede exceder los 50 caracteres.")]
-        public required string Nombre { get; set; }
+        public string Nombre { get; set; }
 
         [Required(ErrorMessage = "El Código es obligatorio.")]
         [MaxLength(10, ErrorMessage = "El Código no puede exceder los 4 caracteres.")]
-        public required string Contrasena { get; set; }
+        public string Contrasena { get; set; }
         public int PersonaId { get; set; }
     }
 }

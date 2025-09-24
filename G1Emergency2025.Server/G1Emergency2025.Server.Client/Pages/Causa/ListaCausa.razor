@@ -1,0 +1,53 @@
+﻿@page "/causas"
+@inject HttpClient Http
+
+<h3>Lista de Causas</h3>
+<table>
+    <tr>
+        <th>Causas</th>
+    </tr>
+    @if (causas == null)
+    {
+        <p>Buscando...</p>
+    }
+    else if (causas.Count == 0)
+    {
+        <p>No hay Causas cargadas en esta lista</p>
+    }
+    else
+    {
+        @foreach (var causa in causas)
+        {
+            <tr>
+                <td>@causa.Codigo</td>
+            </tr>
+        }
+    }
+</table>
+
+@code {
+    List<CausaListadoDTO>? causas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await LeerCausas();
+
+    }
+    private async Task LeerCausas()
+    {
+        causas = await Http.GetFromJsonAsync<List<CausaListadoDTO>>("api/Causa/ListaCausa");
+        // causas = new List<CausaListadoDTO>();
+
+        // causas.Add(new CausaListadoDTO
+        // {
+        //         Codigo = "Choque",
+        //         Id = 1
+        // });
+        // causas.Add(new CausaListadoDTO
+        // {
+        //     Codigo = "Caida",
+        //     Id = 2
+        // });
+    }
+}
