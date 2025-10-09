@@ -58,52 +58,59 @@ namespace Proyecto2025.Server.Controllers
             return Ok(tipoProvincia);
         }
 
-        //[HttpGet("ListaEvento")]
-        //public async Task<ActionResult<List<EventoListadoDTO>>> GetListaEvento()
-        //{
-        //    var lista = await repositorio.SelectListaEvento();
-        //    if (lista == null)
-        //    {
-        //        return NotFound("No se encontro la lista, VERIFICAR.");
-        //    }
-        //    if (lista.Count == 0)
-        //    {
-        //        return Ok("No existen items en la lista en este momento");
-        //    }
-        //    return Ok(lista);
-        //}
-
-        [HttpGet("ListaEventosConNM")]
+        [HttpGet("ListaEventos")]
         public async Task<IActionResult> GetListaEvento()
         {
             var eventos = await repositorio.SelectListaEvento();
             return Ok(eventos);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<int>> Post(EventoDTO DTO)
+        [HttpGet("{id}/ListaEventosPorId")]  //api/Pedido/
+        public async Task<ActionResult<List<EventoListadoDTO>>> ListaDetallePedidoPorId(int id)
         {
-            try
+            var lista = await repositorio.SelectListaPorId(id);
+            if (lista == null)
             {
-                Evento entidad = new Evento
-                {
-                    Codigo = DTO.Codigo,
-                    colorEvento = DTO.colorEvento,
-                    Domicilio = DTO.Domicilio,
-                    Telefono = DTO.Telefono,
-                    FechaHora = DTO.FechaHora,
-                    CausaId = DTO.CausaId,
-                    TipoEstadoId = DTO.TipoEstadoId
-                };
-                var id = await repositorio.Insert(entidad);
-                return Ok(entidad.Id);
+                return NotFound($"No se encontro elementos en la lista con el código: {id}.");
             }
-            catch (Exception e)
-            {
-                return BadRequest($"Error al crear el nuevo registro: {e.Message}");
-            }
-
+            return Ok(lista);
         }
+        //REVISAR POST MUCHOS A MUCHOS EN TODAS LAS TABLAS
+
+        [HttpPost]
+        public async Task<IActionResult> PostEvento([FromBody] EventoDTO dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var id = await repositorio.InsertarEvento(dto);
+            return CreatedAtAction(nameof(GetById), new { id }, new { id });
+        }
+
+        //[HttpPost]
+        //public async Task<ActionResult<int>> Post(EventoDTO DTO)
+        //{
+        //    try
+        //    {
+        //        Evento entidad = new Evento
+        //        {
+        //            Codigo = DTO.Codigo,
+        //            colorEvento = DTO.colorEvento,
+        //            Domicilio = DTO.Domicilio,
+        //            Telefono = DTO.Telefono,
+        //            FechaHora = DTO.FechaHora,
+        //            CausaId = DTO.CausaId,
+        //            TipoEstadoId = DTO.TipoEstadoId
+        //        };
+        //        var id = await repositorio.Insert(entidad);
+        //        return Ok(entidad.Id);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest($"Error al crear el nuevo registro: {e.Message}");
+        //    }
+
+        //}
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Put(int id, EventoDTO DTO)

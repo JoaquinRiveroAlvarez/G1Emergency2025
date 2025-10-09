@@ -10,7 +10,6 @@ namespace G1Emergency2025.Shared.DTO
 {
     public class EventoDTO
     {
-        public int Id { get; set; }
         [Required(ErrorMessage = "El código es obligatorio")]
         public required string Codigo { get; set; }
 
@@ -26,9 +25,10 @@ namespace G1Emergency2025.Shared.DTO
         [Required(ErrorMessage = "La Fecha y Hora es obligatoria")]
         public required DateTime FechaHora { get; set; } = DateTime.Now;
 
-        [Required(ErrorMessage = "El Lugar del Hecho es obligatorio")]
-        [MaxLength(30, ErrorMessage = "La cantidad Maxima de caracteres es 30")]
         public int CausaId { get; set; }
         public int TipoEstadoId { get; set; }
+        public List<int>? PacienteIds { get; set; } = new();
+        public List<int>? UsuarioIds { get; set; } = new();
+        public List<int>? LugarHechoIds { get; set; } = new();
     }
 }

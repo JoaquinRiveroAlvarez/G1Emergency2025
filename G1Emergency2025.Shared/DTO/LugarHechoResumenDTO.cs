@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace G1Emergency2025.Shared.DTO
 {
-    public class PacienteDTO 
+    public class LugarHechoResumenDTO
     {
-        [Required(ErrorMessage = "La obra social es obligatoria")]
-        public required string ObraSocial { get; set; }
-        public int PersonaId { get; set; }
+        public int Id { get; set; }
+        public string Codigo { get; set; }
+        public string Tipo { get; set; }
+        public string Descripcion { get; set; }
     }
 }

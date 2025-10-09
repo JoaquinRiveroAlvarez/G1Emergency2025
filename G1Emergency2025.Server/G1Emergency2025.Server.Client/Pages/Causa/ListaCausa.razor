@@ -1,7 +1,10 @@
 ﻿@page "/causas"
-@inject HttpClient Http
+@inject IHttpServicio Http
 
 <h3>Lista de Causas</h3>
+<br />
+<a class="btn btn-primary" href="/causas/crear">Nueva Causa</a>
+<br>
 <table>
     <tr>
         <th>Causas</th>
@@ -27,6 +30,7 @@
 
 @code {
     List<CausaListadoDTO>? causas;
+    string Mensaje = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -36,18 +40,14 @@
     }
     private async Task LeerCausas()
     {
-        causas = await Http.GetFromJsonAsync<List<CausaListadoDTO>>("api/Causa/ListaCausa");
-        // causas = new List<CausaListadoDTO>();
-
-        // causas.Add(new CausaListadoDTO
-        // {
-        //         Codigo = "Choque",
-        //         Id = 1
-        // });
-        // causas.Add(new CausaListadoDTO
-        // {
-        //     Codigo = "Caida",
-        //     Id = 2
-        // });
+        var resp = await Http.Get<List<CausaListadoDTO>>("api/Causa/ListaCausa");
+        if (!resp.Error)
+        {
+            causas = resp.Respuesta;
+        }
+        else
+        {
+            Mensaje = resp.ObtenerError();
+        }
     }
 }

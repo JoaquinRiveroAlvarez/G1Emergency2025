@@ -1,0 +1,49 @@
+﻿@page "/causas/crear"
+@inject IHttpServicio http
+@inject NavigationManager navHttp
+
+<h3>Crear Nueva Causa</h3>
+
+<EditForm Model="causa" OnValidSubmit="Grabar">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Codigo</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@causa.Codigo" />
+            <ValidationMessage For="@(() => causa.Codigo)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>posibleCausa</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@causa.posibleCausa" />
+            <ValidationMessage For="@(() => causa.posibleCausa)" />
+        </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Aceptar</button>
+</EditForm>
+<button class="btn btn-primary" type="button" @onclik="Cancelar">Cancelar</button>
+
+@code {
+    private CausaDTO causa = new CausaDTO();
+
+    private async Task Grabar()
+    {
+        var httpResp = await http.Post<CausaDTO, int>("api/Causa", causa);
+        if (!httpResp.Error)
+        {
+            navHttp.NavigateTo("/causas");
+        }
+        else
+        {
+            var body = await httpResp.HttpResponseMessage.Content.ReadAsStringAsync();
+        }
+    }
+
+    private void Cancelar()
+    {
+        navHttp.NavigateTo("/causas");
+    }
+}

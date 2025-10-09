@@ -7,5 +7,7 @@ namespace G1Emergency2025.Repositorio.Repositorios
     {
         Task<Evento?> SelectByCod(string cod);
         Task<List<EventoListadoDTO>> SelectListaEvento();
+        Task<EventoListadoDTO?> SelectListaPorId(int id);
+        Task<int> InsertarEvento(EventoDTO dto);
     }
 }

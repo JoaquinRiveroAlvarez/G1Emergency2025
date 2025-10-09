@@ -7,5 +7,6 @@ namespace G1Emergency2025.Repositorio.Repositorios
     {
         Task<LugarHecho?> SelectByCod(string cod);
         Task<List<LugarHechoListadoDTO>> SelectListaLugarHecho();
+        Task AsociarEvento(int lugarhechoId, int eventoId);
     }
 }

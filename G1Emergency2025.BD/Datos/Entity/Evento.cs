@@ -30,9 +30,6 @@ namespace G1Emergency2025.BD.Datos.Entity
         [Required(ErrorMessage = "La Fecha y Hora es obligatoria")]
         public required DateTime FechaHora { get; set; } = DateTime.Now;
 
-        [Required(ErrorMessage = "El Lugar del Hecho es obligatorio")]
-        [MaxLength(30, ErrorMessage = "La cantidad Maxima de caracteres es 30")]
-
         public int CausaId { get; set; }
         public Causa? Causa { get; set; }
         public int TipoEstadoId { get; set; }

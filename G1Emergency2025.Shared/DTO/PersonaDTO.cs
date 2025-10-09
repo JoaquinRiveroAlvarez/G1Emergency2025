@@ -9,6 +9,7 @@ namespace G1Emergency2025.Shared.DTO
 {
     public class PersonaDTO
     {
+
         [Required(ErrorMessage = "El Nombre es obligatorio.")]
         [MaxLength(50, ErrorMessage = "El Nombre no puede exceder los 50 caracteres.")]
         public required string Nombre { get; set; }

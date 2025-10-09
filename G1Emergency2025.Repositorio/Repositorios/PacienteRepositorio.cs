@@ -33,5 +33,16 @@ namespace G1Emergency2025.Repositorio.Repositorios
                                     .ToListAsync();
             return lista;
         }
+        public async Task AsociarEvento(int pacienteId, int eventoId)
+        {
+            var rel = new PacienteEvento
+            {
+                PacienteId = pacienteId,
+                EventoId = eventoId
+            };
+
+            context.PacienteEventos.Add(rel);
+            await context.SaveChangesAsync();
+        }
     }
 }
