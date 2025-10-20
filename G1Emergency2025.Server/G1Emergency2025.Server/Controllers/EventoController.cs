@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Proyecto2025.Server.Controllers
 {
     [ApiController]
-    [Route("api/Evento")]
+    [Route("api/evento")]
     public class EventoController : ControllerBase
     {
         private readonly IEventoRepositorio repositorio;
@@ -58,7 +58,7 @@ namespace Proyecto2025.Server.Controllers
             return Ok(tipoProvincia);
         }
 
-        [HttpGet("ListaEventos")]
+        [HttpGet("ListaEvento")]
         public async Task<IActionResult> GetListaEvento()
         {
             var eventos = await repositorio.SelectListaEvento();
@@ -75,8 +75,16 @@ namespace Proyecto2025.Server.Controllers
             }
             return Ok(lista);
         }
-        //REVISAR POST MUCHOS A MUCHOS EN TODAS LAS TABLAS
 
+        //[HttpPost]
+        //public async Task<IActionResult> PostEvento([FromBody] EventoDTO dto)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
+
+        //    var id = await repositorio.InsertarEvento(dto);
+        //    return CreatedAtAction(nameof(GetById), new { id }, new { id });
+        //}
         [HttpPost]
         public async Task<IActionResult> PostEvento([FromBody] EventoDTO dto)
         {
@@ -84,33 +92,8 @@ namespace Proyecto2025.Server.Controllers
                 return BadRequest(ModelState);
 
             var id = await repositorio.InsertarEvento(dto);
-            return CreatedAtAction(nameof(GetById), new { id }, new { id });
+            return Ok(id); // ✅ En vez de CreatedAtAction
         }
-
-        //[HttpPost]
-        //public async Task<ActionResult<int>> Post(EventoDTO DTO)
-        //{
-        //    try
-        //    {
-        //        Evento entidad = new Evento
-        //        {
-        //            Codigo = DTO.Codigo,
-        //            colorEvento = DTO.colorEvento,
-        //            Domicilio = DTO.Domicilio,
-        //            Telefono = DTO.Telefono,
-        //            FechaHora = DTO.FechaHora,
-        //            CausaId = DTO.CausaId,
-        //            TipoEstadoId = DTO.TipoEstadoId
-        //        };
-        //        var id = await repositorio.Insert(entidad);
-        //        return Ok(entidad.Id);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest($"Error al crear el nuevo registro: {e.Message}");
-        //    }
-
-        //}
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Put(int id, EventoDTO DTO)
@@ -136,16 +119,33 @@ namespace Proyecto2025.Server.Controllers
 
             return Ok($"El registro con el id: {id} fue actualizado correctamente.");
         }
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutEvento(int id, EventoDTO dto)
+        //{
+        //    var resultado = await Repositorio.UpdateEvento(id, dto);
+        //    if (!resultado)
+        //        return NotFound();
 
-        [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
+        //    return NoContent(); 
+        //}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var resultado = await repositorio.Delete(id);
-            if (!resultado)
-            {
-                return BadRequest("Datos no validos");
-            }
-            return Ok($"El registro con el id: {id} fue eliminado correctamente.");
+            var eliminado = await repositorio.DeleteEvento(id);
+            if (!eliminado)
+                return NotFound();
+
+            return NoContent();
         }
+        //[HttpDelete("{id:int}")]
+        //public async Task<ActionResult> Delete(int id)
+        //{
+        //    var resultado = await repositorio.Delete(id);
+        //    if (!resultado)
+        //    {
+        //        return BadRequest("Datos no validos");
+        //    }
+        //    return Ok($"El registro con el id: {id} fue eliminado correctamente.");
+        //}
     }
 }

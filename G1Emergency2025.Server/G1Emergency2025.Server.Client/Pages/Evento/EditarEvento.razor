@@ -1,0 +1,99 @@
+﻿@page "/eventos/editar/{Id:int}"
+@using G1Emergency2025.Shared.Enum
+@inject IHttpServicio Http
+@inject NavigationManager Nav
+
+<h3>Editar Evento</h3>
+
+@if (evento == null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <EditForm Model="evento" OnValidSubmit="GuardarCambios">
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label>Código</label>
+            <InputText class="form-control" @bind-Value="evento.Codigo" />
+        </div>
+
+        <div class="form-group">
+            <label>Color del Evento</label>
+            <InputSelect class="form-control" @bind-Value="evento.colorEvento">
+                @foreach (var color in Enum.GetValues<ColorEvento>())
+                {
+                    <option value="@color">@color</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label>Domicilio</label>
+            <InputText class="form-control" @bind-Value="evento.Domicilio" />
+        </div>
+
+        <div class="form-group">
+            <label>Teléfono</label>
+            <InputText class="form-control" @bind-Value="evento.Telefono" />
+        </div>
+
+        <div class="form-group">
+            <label>Fecha y Hora</label>
+            <InputDate class="form-control" @bind-Value="evento.FechaHora" />
+        </div>
+
+        <br />
+        <button class="btn btn-primary" type="submit">Guardar</button>
+        <button class="btn btn-secondary" @onclick="Volver">Cancelar</button>
+    </EditForm>
+}
+
+<p>@Mensaje</p>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private EventoDTO? evento;
+    private string Mensaje = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resp = await Http.Get<EventoDTO>($"api/evento/id/{Id}");
+        if (!resp.Error)
+        {
+            evento = resp.Respuesta;
+        }
+        else
+        {
+            Mensaje = resp.ObtenerError();
+        }
+    }
+
+    private async Task GuardarCambios()
+    {
+        try
+        {
+            var resp = await Http.Put<EventoDTO, int>($"api/evento/{Id}", evento!);
+            if (!resp.Error)
+            {
+                Nav.NavigateTo("/eventos");
+            }
+            else
+            {
+                Mensaje = resp.ObtenerError();
+            }
+        }
+        catch(Exception ex)
+        {
+            Mensaje = $"Error al guardar cambios: {ex.Message}";
+            return;
+        }
+    }
+
+    private void Volver()
+    {
+        Nav.NavigateTo("/eventos");
+    }
+}
+

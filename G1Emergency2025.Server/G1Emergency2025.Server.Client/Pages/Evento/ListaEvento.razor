@@ -1,0 +1,147 @@
+﻿@page "/eventos"
+@using System.Text.Json
+@inject IHttpServicio Http
+
+<h3>Lista de Eventos</h3>
+<br />
+<a class="btn btn-primary" href="/eventos/crear">Nuevo Evento</a>
+<br>
+<table>
+    <tr>
+        <th>Eventos</th>
+    </tr>
+    @if (eventos == null)
+    {
+        <p>Buscando...</p>
+    }
+    else if (eventos.Count == 0)
+    {
+        <p>No hay Eventos cargados en esta lista</p>
+    }
+    else
+    {
+        @foreach (var evento in eventos)
+        {
+            <tr>
+                <td>@evento.Codigo</td>
+
+                <td>@evento.colorEvento</td>
+
+                <td>@evento.Domicilio</td>
+
+                <td>@evento.Telefono</td>
+
+                <td>@evento.FechaHora</td>
+                <td>
+                    @if (evento.Pacientes != null && evento.Pacientes.Any())
+                    {
+                        @foreach (var p in evento.Pacientes)
+                        {
+                            <div>@p.ObraSocial</div>
+                        }
+                    }
+
+                </td>
+                <td>
+                    @if (evento.Usuarios != null && evento.Usuarios.Any())
+                    {
+                        @foreach (var u in evento.Usuarios)
+                        {
+                            <div>@u.Nombre</div>
+                        }
+                    }
+
+                </td>
+                <td>
+                    @if (evento.Lugares != null && evento.Lugares.Any())
+                    {
+                        @foreach (var l in evento.Lugares)
+                        {
+                            <div>@l.Descripcion</div>
+                        }
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-primary" href="/eventos/editar/@evento.Id">
+                        Editar
+                    </a>
+                </td>
+                <td>
+                    <button class="btn btn-danger"
+                            @onclick="() => Borrar(evento)">
+                        Borrar
+                    </button>
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(Mensaje))
+                    {
+                        <div class="alert alert-info mt-3">@Mensaje</div>
+                    }
+                </td>
+            </tr>
+        }
+    }
+</table>
+<br />
+<p>@Mensaje</p>
+@code {
+    List<EventoListadoDTO>? eventos;
+    string Mensaje = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await base.OnInitializedAsync();
+            await LeerEventos();
+        }
+        catch (Exception ex)
+        {
+            Mensaje = $"Error durante la inicialización: {ex.Message}";
+            Console.WriteLine($"[InitError] {ex}");
+        }
+    }
+    private async Task LeerEventos()
+    {
+        try
+        {
+            var resp = await Http.Get<List<EventoListadoDTO>>("api/evento/ListaEvento");
+
+            if (!resp.Error)
+            {
+                eventos = resp.Respuesta ?? new List<EventoListadoDTO>();
+            }
+            else
+            {
+                Mensaje = $"Error al obtener eventos: {resp.ObtenerError()}";
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            Mensaje = $"❌ Error de conexión con el servidor: {ex.Message}";
+            Console.WriteLine($"[HttpRequestException] {ex}");
+        }
+        catch (JsonException ex)
+        {
+            Mensaje = $"❌ Error al procesar los datos recibidos: {ex.Message}";
+            Console.WriteLine($"[JsonException] {ex}");
+        }
+        catch (Exception ex)
+        {
+            Mensaje = $"❌ Error inesperado: {ex.Message}";
+            Console.WriteLine($"[Exception] {ex}");
+        }
+    }
+
+    private async Task Borrar(EventoListadoDTO evento)
+    {
+        var resp = await Http.Delete($"api/evento/{evento.Id}");
+
+        if (resp.Error)
+        {
+            Mensaje = resp.ObtenerError();
+        }
+        await LeerEventos();
+    }
+}
+

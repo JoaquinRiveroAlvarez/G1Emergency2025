@@ -23,11 +23,24 @@
         {
             <tr>
                 <td>@causa.Codigo</td>
+                <td>
+                    <a class="btn btn-primary"
+                       href="/causas/editar/{causa.Id}">
+                        Editar
+                    </a>
+                </td>
+                <td>
+                    <button class="btn btn-danger"
+                            @onclick="() => Borrar(causa)">
+                        Borrar
+                    </button>
+                </td>
             </tr>
         }
     }
 </table>
-
+<br />
+<p>@Mensaje</p>
 @code {
     List<CausaListadoDTO>? causas;
     string Mensaje = "";
@@ -40,7 +53,7 @@
     }
     private async Task LeerCausas()
     {
-        var resp = await Http.Get<List<CausaListadoDTO>>("api/Causa/ListaCausa");
+        var resp = await Http.Get<List<CausaListadoDTO>>("api/causa/ListaCausa");
         if (!resp.Error)
         {
             causas = resp.Respuesta;
@@ -49,5 +62,15 @@
         {
             Mensaje = resp.ObtenerError();
         }
+    }
+
+    private async Task Borrar(CausaListadoDTO causa)
+    {
+        var resp = await Http.Delete($"api/causa/{causa.Id}");
+        if (resp.Error)
+        {
+            Mensaje = resp.ObtenerError();
+        }
+        await LeerCausas();
     }
 }

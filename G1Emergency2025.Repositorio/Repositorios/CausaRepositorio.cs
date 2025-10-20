@@ -20,7 +20,8 @@ namespace G1Emergency2025.Repositorio.Repositorios
         }
         public async Task<Causa?> SelectByCod(string cod)
         {
-            return await context.Set<Causa>().FirstOrDefaultAsync(x => x.Codigo == cod);
+            Causa? entidad = await context.Causas.FirstOrDefaultAsync(x => x.Codigo == cod);
+            return entidad;
         }
         public async Task<List<CausaListadoDTO>> SelectListaCausa()
         {

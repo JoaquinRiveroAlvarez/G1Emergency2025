@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Proyecto2025.Server.Controllers
 {
     [ApiController]
-    [Route("api/LugarHecho")]
+    [Route("api/lugarHecho")]
     public class LugarHechoController : ControllerBase
     {
         private readonly ILugarHechoRepositorio repositorio;

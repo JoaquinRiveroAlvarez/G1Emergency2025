@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace G1Emergency2025.Server.Controllers
 {
     [ApiController]
-    [Route("api/Paciente")]
+    [Route("api/paciente")]
     public class PacienteController : ControllerBase
     {
         private readonly IPacienteRepositorio repositorio;

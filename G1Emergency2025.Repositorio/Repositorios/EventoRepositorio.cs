@@ -99,21 +99,22 @@ namespace G1Emergency2025.Repositorio.Repositorios
                     Domicilio = e.Domicilio,
                     Telefono = e.Telefono,
                     FechaHora = e.FechaHora,
-
-                    // aquí usamos el DTO de "listado"
+                    //Pacientes = e.PacienteEventos.Select(pe => pe.Paciente.Persona.Nombre).ToList(),
+                    //Usuarios = e.EventoUsuarios.Select(eu => eu.Usuario.Nombre).ToList(),
+                    //Lugares = e.EventoLugarHechos.Select(elh => elh.LugarHechoResumenDTO.Descripcion).ToList()
                     Pacientes = e.PacienteEventos
                         .Select(pe => new PacienteResumenDTO
                         {
                             Id = pe.PacienteId,
-                            ObraSocial = " Obra Social: " +pe.Pacientes!.ObraSocial +" DNI: "+ pe.Pacientes!.Personas!.DNI + " Nombre y Apellido: " + pe.Pacientes.Personas.Nombre + " " + pe.Pacientes.Personas.Apellido
+                            ObraSocial = " Obra Social: " + pe.Pacientes!.ObraSocial + " DNI: " + pe.Pacientes!.Personas!.DNI + " Nombre y Apellido: " + pe.Pacientes.Personas.Nombre + " " + pe.Pacientes.Personas.Apellido
                         }).ToList(),
 
                     Usuarios = e.EventoUsuarios
                         .Select(eu => new UsuarioResumenDTO
                         {
                             Id = eu.UsuarioId,
-                            Nombre = " Nombre de Usuario: " + eu.Usuarios!.Nombre + " DNI: " +eu.Usuarios!.Personas!.DNI,
-                            Contrasena = "Contraseña: " + eu.Usuarios.Contrasena                 
+                            Nombre = " Nombre de Usuario: " + eu.Usuarios!.Nombre + " DNI: " + eu.Usuarios!.Personas!.DNI,
+                            Contrasena = "Contraseña: " + eu.Usuarios.Contrasena
                         }).ToList(),
 
                     Lugares = e.EventoLugarHechos
@@ -125,7 +126,9 @@ namespace G1Emergency2025.Repositorio.Repositorios
                             Descripcion = " Descripción: " + elh.LugarHecho.Descripcion
                         }).ToList()
 
-                }).ToListAsync();
+                })
+                .OrderBy(e => e.FechaHora)
+                .ToListAsync();
 
             return lista;
         }
@@ -162,6 +165,27 @@ namespace G1Emergency2025.Repositorio.Repositorios
 
             return evento.Id;
         }
+        public async Task<bool> DeleteEvento(int id)
+        {
+            var evento = await context.Eventos
+                .Include(e => e.PacienteEventos)
+                .Include(e => e.EventoUsuarios)
+                .Include(e => e.EventoLugarHechos)
+                .FirstOrDefaultAsync(e => e.Id == id);
 
+            if (evento == null)
+                return false;
+
+            // Eliminar relaciones N:M manualmente
+            context.RemoveRange(evento.PacienteEventos);
+            context.RemoveRange(evento.EventoUsuarios);
+            context.RemoveRange(evento.EventoLugarHechos);
+
+            // Finalmente eliminar el evento
+            context.Eventos.Remove(evento);
+
+            await context.SaveChangesAsync();
+            return true;
+        }
     }
 }

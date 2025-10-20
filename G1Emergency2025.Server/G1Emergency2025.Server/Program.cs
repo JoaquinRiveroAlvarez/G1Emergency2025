@@ -4,6 +4,7 @@ using G1Emergency2025.Repositorio.IRepositorios;
 using G1Emergency2025.Repositorio.Repositorios;
 using G1Emergency2025.Server.Client.Pages;
 using G1Emergency2025.Server.Components;
+using G1Emergency2025.Servicio.ServiciosHttp;
 using G1Emergency2025.Shared.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -11,8 +12,13 @@ using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped(sp => new HttpClient
+{
+    BaseAddress = new Uri("https://localhost:7150/")
+});
 // Add services to the container.
 #region Construccion
+builder.Services.AddScoped<IHttpServicio, HttpServicio>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -34,10 +40,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 //CONEXION BLAZOR CON API
 
-//builder.Services.AddScoped(sp => new HttpClient
-//{
-//    BaseAddress = new Uri("https://localhost:7150/") // tu URL de la API
-//});
+
 
 
 //REPOSITORIOS

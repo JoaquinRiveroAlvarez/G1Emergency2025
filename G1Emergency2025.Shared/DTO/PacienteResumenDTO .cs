@@ -11,5 +11,7 @@ namespace G1Emergency2025.Shared.DTO
     {
         public int Id { get; set; }
         public required string ObraSocial { get; set; }
+
+        //public PersonaDTO? Persona { get; set; }
     }
 }

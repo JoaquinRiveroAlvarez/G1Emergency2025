@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Proyecto2025.Server.Controllers
 {
     [ApiController]
-    [Route("api/Causa")]
+    [Route("api/causa")]
     public class CausaController : ControllerBase
     {
         private readonly ICausaRepositorio repositorio;
@@ -92,24 +92,15 @@ namespace Proyecto2025.Server.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, CausaDTO DTO)
+        [HttpPut("{id:int}")] 
+        public async Task<ActionResult> Put(int id, Causa DTO)
         {
-            var entidad = new Causa
+            var flag = await repositorio.Update(id, DTO);
+            if (!flag)
             {
-                Id = id,
-                posibleCausa = DTO.posibleCausa,
-                Codigo = DTO.Codigo
-            };
-
-            var resultado = await repositorio.Update(id, entidad);
-
-            if (!resultado)
-            {
-                return BadRequest("Datos no válidos");
+                return BadRequest("Datos no validos o el registro no existe.");
             }
-
-            return Ok($"El registro con el id: {id} fue actualizado correctamente.");
+            return Ok($"Registro con el id: {id} actualizado correctamente.");
         }
 
         [HttpDelete("{id:int}")]

@@ -9,6 +9,7 @@ namespace G1Emergency2025.Shared.DTO
 {
     public class TipoEstadoDTO
     {
+        public int Id { get; set; }
         [Required(ErrorMessage = "El Código es obligatorio.")]
         [MaxLength(10, ErrorMessage = "La cantidad Maxima de caracteres es 10")]
         public required string Codigo { get; set; }

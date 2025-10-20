@@ -13,7 +13,7 @@
             <ValidationMessage For="@(() => causa.Codigo)" />
         </div>
     </div>
-
+    <br />
     <div class="form-group">
         <label>posibleCausa</label>
         <div>
@@ -21,24 +21,28 @@
             <ValidationMessage For="@(() => causa.posibleCausa)" />
         </div>
     </div>
-
+    <br />
     <button class="btn btn-primary" type="submit">Aceptar</button>
+    <button class="btn btn-primary" @onclick="Cancelar">Cancelar</button>
 </EditForm>
-<button class="btn btn-primary" type="button" @onclik="Cancelar">Cancelar</button>
+<br />
+<p>@Mensaje</p>
+
 
 @code {
     private CausaDTO causa = new CausaDTO();
+    string Mensaje = "";
 
     private async Task Grabar()
     {
-        var httpResp = await http.Post<CausaDTO, int>("api/Causa", causa);
+        var httpResp = await http.Post<CausaDTO, int>("api/causa", causa);
         if (!httpResp.Error)
         {
             navHttp.NavigateTo("/causas");
         }
         else
         {
-            var body = await httpResp.HttpResponseMessage.Content.ReadAsStringAsync();
+            Mensaje = httpResp.ObtenerError();
         }
     }
 

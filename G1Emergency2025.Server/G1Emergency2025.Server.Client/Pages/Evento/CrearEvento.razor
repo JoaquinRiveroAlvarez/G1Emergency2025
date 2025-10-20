@@ -1,0 +1,190 @@
+﻿@page "/eventos/crear"
+@using G1Emergency2025.Shared.Enum
+@using G1Emergency2025.Shared.DTO
+@inject IHttpServicio Http
+@inject NavigationManager Nav
+
+<h3>Crear Nuevo Evento</h3>
+
+@if (cargando)
+{
+    <p>Cargando datos...</p>
+}
+else
+{
+    <EditForm Model="@evento" OnValidSubmit="Grabar">
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label>Código</label>
+            <InputText class="form-control" @bind-Value="evento!.Codigo" />
+        </div>
+
+        <div class="form-group">
+            <label>Domicilio</label>
+            <InputText class="form-control" @bind-Value="evento.Domicilio" />
+        </div>
+
+        <div class="form-group">
+            <label>Teléfono</label>
+            <InputText class="form-control" @bind-Value="evento.Telefono" />
+        </div>
+
+        <div class="form-group">
+            <label>Color del Evento</label>
+            <InputSelect class="form-control" @bind-Value="evento.colorEvento">
+                @foreach (var color in Enum.GetValues<ColorEvento>())
+                {
+                    <option value="@color">@color</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label>Causa</label>
+            <InputSelect class="form-control" @bind-Value="evento.CausaId">
+                <option value="0">-- Seleccionar causa --</option>
+                @foreach (var c in causas)
+                {
+                    <option value="@c.Id">@($"{c.Codigo} - {c.posibleCausa}")</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label>Causa</label>
+            <InputSelect class="form-control" @bind-Value="evento.TipoEstadoId">
+                <option value="0">-- Seleccionar Estado --</option>
+                @foreach (var c in tipoestados)
+                {
+                    <option value="@c.Id">@($"{c.Codigo} - {c.Tipo}")</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label>Pacientes</label>
+            <select class="form-control" multiple @onchange="OnPacientesChange">
+                @foreach (var p in pacientes)
+                {
+                    <option value="@p.Id">@p.ObraSocial</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Usuarios</label>
+            <select class="form-control" multiple @onchange="OnUsuariosChange">
+                @foreach (var u in usuarios)
+                {
+                    <option value="@u.Id">@($"{u.Nombre} - {u.Contrasena}")</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Lugares del Hecho</label>
+            <select class="form-control" multiple @onchange="OnLugaresChange">
+                @foreach (var l in lugares)
+                {
+                    <option value="@l.Id">@($"{l.Codigo} - {l.Tipo} - {l.Descripcion}")</option>
+                }
+            </select>
+        </div>
+
+        <br />
+        <button class="btn btn-primary" type="submit">Guardar</button>
+        <button class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+    </EditForm>
+}
+
+<p>@Mensaje</p>
+
+@code {
+    private EventoDTO? evento;
+    private List<CausaDTO> causas = new();
+    private List<TipoEstadoDTO> tipoestados = new();
+    private List<PacienteResumenDTO> pacientes = new();
+    private List<UsuarioResumenDTO> usuarios = new();
+    private List<LugarHechoResumenDTO> lugares = new();
+    private bool cargando = true;
+    private string Mensaje = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var respPacientes = await Http.Get<List<PacienteResumenDTO>>("api/paciente");
+            var respUsuarios = await Http.Get<List<UsuarioResumenDTO>>("api/usuario");
+            var respLugares = await Http.Get<List<LugarHechoResumenDTO>>("api/lugarhecho");
+            var respTipoEstados = await Http.Get<List<TipoEstadoDTO>>("api/tipoestado");
+            var respCausas = await Http.Get<List<CausaDTO>>("api/causa");
+            if (!respCausas.Error) causas = respCausas.Respuesta!;
+            if (!respTipoEstados.Error) tipoestados = respTipoEstados.Respuesta!;
+          
+            if (!respPacientes.Error) pacientes = respPacientes.Respuesta!;
+            if (!respUsuarios.Error) usuarios = respUsuarios.Respuesta!;
+            if (!respLugares.Error) lugares = respLugares.Respuesta!;
+
+        }
+        catch (Exception ex)
+        {
+            Mensaje = $"Error al cargar datos: {ex.Message}";
+        }
+
+        // ✅ Inicializamos el modelo para que no sea null
+        evento = new EventoDTO
+        {
+            Codigo = "",
+            Domicilio = "",
+            Telefono = "",
+            colorEvento = ColorEvento.Verde,
+            CausaId = 0,
+            TipoEstadoId = 0,
+            PacienteIds = new List<int>(),
+            UsuarioIds = new List<int>(),
+            LugarHechoIds = new List<int>(),
+            FechaHora = DateTime.Now
+        };
+
+        cargando = false;
+    }
+    private void OnPacientesChange(ChangeEventArgs e)
+    {
+        var selected = (IEnumerable<string>)e.Value!;
+        evento!.PacienteIds = selected.Select(int.Parse).ToList();
+    }
+
+    private void OnUsuariosChange(ChangeEventArgs e)
+    {
+        var selected = (IEnumerable<string>)e.Value!;
+        evento!.UsuarioIds = selected.Select(int.Parse).ToList();
+    }
+
+    private void OnLugaresChange(ChangeEventArgs e)
+    {
+        var selected = (IEnumerable<string>)e.Value!;
+        evento!.LugarHechoIds = selected.Select(int.Parse).ToList();
+    }
+    private async Task Grabar()
+    {
+        var httpResp = await Http.Post<EventoDTO, int>("api/evento", evento!);
+        if (!httpResp.Error)
+        {
+            Mensaje = "Evento guardado correctamente.";
+            await InvokeAsync(StateHasChanged);
+            await Task.Delay(300);
+            Nav.NavigateTo("/eventos", forceLoad: true);
+        }
+        else
+        {
+            Mensaje = httpResp.ObtenerError();
+        }
+    }
+
+    private void Cancelar()
+    {
+        Nav.NavigateTo("/eventos");
+    }
+}
+

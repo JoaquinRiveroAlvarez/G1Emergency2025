@@ -40,7 +40,7 @@ namespace G1Emergency2025.Repositorio.Repositorios
         {
             try
             {
-                entidad.EstadoRegistro = EnumEstadoRegistro.activo;
+                //entidad.EstadoRegistro = EnumEstadoRegistro.activo;
                 await context.Set<E>().AddAsync(entidad);
                 await context.SaveChangesAsync();
                 return entidad.Id;

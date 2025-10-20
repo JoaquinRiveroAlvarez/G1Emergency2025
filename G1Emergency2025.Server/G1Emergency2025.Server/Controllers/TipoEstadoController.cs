@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Proyecto2025.Server.Controllers
 {
     [ApiController]
-    [Route("api/TipoEstado")]
+    [Route("api/tipoEstado")]
     public class TipoEstadoController : ControllerBase
     {
         private readonly ITipoEstadoRepositorio repositorio;
