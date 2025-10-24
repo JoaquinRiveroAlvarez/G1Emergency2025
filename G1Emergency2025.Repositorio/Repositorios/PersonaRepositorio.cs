@@ -31,10 +31,12 @@ namespace G1Emergency2025.Repositorio.Repositorios
                                     .Select(p => new PersonaListadoDTO
                                     {
                                         Id = p.Id,
-                                        Persona = $"Nombre: {p.Nombre} - Apellido: {p.Apellido} - DNI: {p.DNI} - Dirección: {p.Dirección} - Sexo: {p.Sexo} - Edad: {p.Edad}"
+                                        Persona = $"Nombre y Apellido: {p.Nombre} - DNI: {p.DNI} - Dirección: {p.Dirección} - Sexo: {p.Sexo} - Edad: {p.Edad}"
                                     })
                                     .ToListAsync();
             return lista;
         }
+        
     }
 }
+

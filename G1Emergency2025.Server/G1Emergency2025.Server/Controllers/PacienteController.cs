@@ -61,22 +61,51 @@ namespace G1Emergency2025.Server.Controllers
             return Ok(Paciente);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<int>> Post(PacienteDTO DTO)
+        //[HttpPost]
+        //public async Task<ActionResult<int>> Post(PacienteDTO DTO)
+        //{
+        //    try
+        //    {
+        //        Paciente entidad = new Paciente
+        //        {
+        //            ObraSocial = DTO.ObraSocial,
+        //            PersonaId = DTO.PersonaId
+        //        };
+        //        var id = await repositorio.Insert(entidad);
+        //        return Ok(entidad.Id);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest($"Error al crear el nuevo registro: {e.Message}");
+        //    }
+        //}
+
+        [HttpPost("crearConPersona")]
+        public async Task<ActionResult<int>> CrearConPersona(PacienteCrearDTO dto)
         {
+            Console.WriteLine("📌 LLEGÓ AL CONTROLLER");
             try
             {
-                Paciente entidad = new Paciente
+                var persona = new Persona
                 {
-                    ObraSocial = DTO.ObraSocial,
-                    PersonaId = DTO.PersonaId
+                    Nombre = dto.Nombre,
+                    DNI = dto.DNI,
+                    Dirección = dto.Dirección,
+                    Sexo = dto.Sexo,
+                    Edad = dto.Edad,
                 };
-                var id = await repositorio.Insert(entidad);
-                return Ok(entidad.Id);
+
+                var paciente = new Paciente
+                {
+                    ObraSocial = dto.ObraSocial
+                };
+
+                var id = await repositorio.CrearPacienteConPersona(persona, paciente);
+                return Ok(id);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return BadRequest($"Error al crear el nuevo registro: {e.Message}");
+                return StatusCode(500, $"Error al crear paciente: {ex.Message}");
             }
         }
 

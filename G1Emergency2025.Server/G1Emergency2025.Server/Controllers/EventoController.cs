@@ -18,6 +18,19 @@ namespace Proyecto2025.Server.Controllers
             this.repositorio = repositorio;
         }
 
+        //[HttpGet("existe/{Codigo}")]
+        //public async Task<ActionResult<bool>> ExisteCodigo(string codigo)
+        //{
+        //    try
+        //    {
+        //        bool existe = await repositorio.ExistePredi(x => x.Codigo == codigo);
+        //        return Ok(existe);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest($"Error al verificar el código: {ex.Message}");
+        //    }
+        //}
         [HttpGet]
         public async Task<ActionResult<List<Evento>>> GetList()
         {
@@ -88,11 +101,21 @@ namespace Proyecto2025.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> PostEvento([FromBody] EventoDTO dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var id = await repositorio.InsertarEvento(dto);
-            return Ok(id); // ✅ En vez de CreatedAtAction
+            try
+            {
+                int id = await repositorio.InsertarEvento(dto);
+                return Ok(id);
+            }
+            catch (ApplicationException ex)
+            {
+                // Esto devuelve el mensaje controlado al cliente
+                return BadRequest(new { mensaje = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Errores no esperados
+                return StatusCode(500, new { mensaje = "Error interno del servidor", detalle = ex.Message });
+            }
         }
 
         [HttpPut("{id:int}")]

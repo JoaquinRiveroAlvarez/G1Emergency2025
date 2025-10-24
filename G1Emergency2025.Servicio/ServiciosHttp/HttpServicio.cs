@@ -36,6 +36,7 @@ namespace G1Emergency2025.Servicio.ServiciosHttp
                                               "application/json");
 
             var response = await http.PostAsync(url, contenido);
+            var contenidoError = await response.Content.ReadAsStringAsync(); // 👈 línea nueva
             if (response.IsSuccessStatusCode)
             {
                 var respuesta = await DesSerializar<TResp>(response);

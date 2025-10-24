@@ -29,7 +29,7 @@ namespace G1Emergency2025.Repositorio.Repositorios
                                     .Select(p => new TripulacionActualListadoDTO
                                     {
                                         Id = p.Id,
-                                        TripulacionActual = $" Fecha de Entrada: {p.FechaEntrada} - Id Tripulante: {p.TripulanteId} - Nombre y Apellido:{p.Tripulantes!.Personas!.Nombre} {p.Tripulantes!.Personas!.Apellido} - Id Movil: {p.MovilId} - Patente Movil: {p.Movils!.Patente}"
+                                        TripulacionActual = $" Fecha de Entrada: {p.FechaEntrada} - Id Tripulante: {p.TripulanteId} - Nombre y Apellido:{p.Tripulantes!.Personas!.Nombre} - Id Movil: {p.MovilId} - Patente Movil: {p.Movils!.Patente}"
                                     })
                                     .ToListAsync();
             return lista;

@@ -1,22 +1,45 @@
 ﻿@page "/eventos/editar/{Id:int}"
-@using G1Emergency2025.Shared.Enum
 @inject IHttpServicio Http
 @inject NavigationManager Nav
 
 <h3>Editar Evento</h3>
 
-@if (evento == null)
+@if (cargando)
 {
-    <p>Cargando...</p>
+    <p>Cargando datos...</p>
+}
+else if (evento == null)
+{
+    <p>No se encontró el evento.</p>
 }
 else
 {
-    <EditForm Model="evento" OnValidSubmit="GuardarCambios">
+    <EditForm Model="@evento" OnValidSubmit="GuardarCambios">
         <DataAnnotationsValidator />
+        <ValidationSummary />
 
         <div class="form-group">
             <label>Código</label>
             <InputText class="form-control" @bind-Value="evento.Codigo" />
+            <ValidationMessage For="@(() => evento.Codigo)" />
+        </div>
+
+        <div class="form-group">
+            <label>Domicilio</label>
+            <InputText class="form-control" @bind-Value="evento.Domicilio" />
+            <ValidationMessage For="@(() => evento.Domicilio)" />
+        </div>
+
+        <div class="form-group">
+            <label>Teléfono</label>
+            <InputText class="form-control" @bind-Value="evento.Telefono" />
+            <ValidationMessage For="@(() => evento.Telefono)" />
+        </div>
+
+        <div class="form-group">
+            <label>Fecha y Hora</label>
+            <InputDate class="form-control" @bind-Value="evento.FechaHora" />
+            <ValidationMessage For="@(() => evento.FechaHora)" />
         </div>
 
         <div class="form-group">
@@ -27,21 +50,64 @@ else
                     <option value="@color">@color</option>
                 }
             </InputSelect>
+            <ValidationMessage For="@(() => evento.colorEvento)" />
         </div>
 
         <div class="form-group">
-            <label>Domicilio</label>
-            <InputText class="form-control" @bind-Value="evento.Domicilio" />
+            <label>Causa</label>
+            <InputSelect class="form-control" @bind-Value="evento.CausaId">
+                <option value="0">-- Seleccionar causa --</option>
+                @foreach (var c in causas)
+                {
+                    <option value="@c.Id">@($"{c.Codigo} - {c.posibleCausa}")</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => evento.CausaId)" />
         </div>
 
         <div class="form-group">
-            <label>Teléfono</label>
-            <InputText class="form-control" @bind-Value="evento.Telefono" />
+            <label>Estado</label>
+            <InputSelect class="form-control" @bind-Value="evento.TipoEstadoId">
+                <option value="0">-- Seleccionar estado --</option>
+                @foreach (var e in tipoestados)
+                {
+                    <option value="@e.Id">@($"{e.Codigo} - {e.Tipo}")</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => evento.TipoEstadoId)" />
         </div>
 
         <div class="form-group">
-            <label>Fecha y Hora</label>
-            <InputDate class="form-control" @bind-Value="evento.FechaHora" />
+            <label>Pacientes</label>
+            <InputSelectMultiple @bind-Value="evento.PacienteIds" class="form-control">
+                @foreach (var p in pacientes)
+                {
+                    <option value="@p.Id">@p.ObraSocial</option>
+                }
+            </InputSelectMultiple>
+            <ValidationMessage For="@(() => evento.PacienteIds)" />
+        </div>
+
+        <div class="form-group">
+            <label>Usuarios</label>
+            <InputSelectMultiple @bind-Value="evento.UsuarioIds" class="form-control">
+                @foreach (var u in usuarios)
+                {
+                    <option value="@u.Id">@($"{u.Nombre} - {u.Contrasena}")</option>
+                }
+            </InputSelectMultiple>
+            <ValidationMessage For="@(() => evento.UsuarioIds)" />
+        </div>
+
+        <div class="form-group">
+            <label>Lugares del Hecho</label>
+            <InputSelectMultiple @bind-Value="evento.LugarHechoIds" class="form-control">
+                @foreach (var l in lugares)
+                {
+                    <option value="@l.Id">@($"{l.Codigo} - {l.Tipo} - {l.Descripcion}")</option>
+                }
+            </InputSelectMultiple>
+            <ValidationMessage For="@(() => evento.LugarHechoIds)" />
         </div>
 
         <br />
@@ -55,39 +121,60 @@ else
 @code {
     [Parameter] public int Id { get; set; }
     private EventoDTO? evento;
+    private List<CausaDTO> causas = new();
+    private List<TipoEstadoDTO> tipoestados = new();
+    private List<PacienteResumenDTO> pacientes = new();
+    private List<UsuarioResumenDTO> usuarios = new();
+    private List<LugarHechoResumenDTO> lugares = new();
     private string Mensaje = "";
+    private bool cargando = true;
 
     protected override async Task OnInitializedAsync()
     {
-        var resp = await Http.Get<EventoDTO>($"api/evento/id/{Id}");
-        if (!resp.Error)
+        try
         {
-            evento = resp.Respuesta;
+            // Cargar listas base
+            var respPacientes = await Http.Get<List<PacienteResumenDTO>>("api/paciente");
+            var respUsuarios = await Http.Get<List<UsuarioResumenDTO>>("api/usuario");
+            var respLugares = await Http.Get<List<LugarHechoResumenDTO>>("api/lugarhecho");
+            var respTipoEstados = await Http.Get<List<TipoEstadoDTO>>("api/tipoestado");
+            var respCausas = await Http.Get<List<CausaDTO>>("api/causa");
+
+            if (!respCausas.Error) causas = respCausas.Respuesta!;
+            if (!respTipoEstados.Error) tipoestados = respTipoEstados.Respuesta!;
+            if (!respPacientes.Error) pacientes = respPacientes.Respuesta!;
+            if (!respUsuarios.Error) usuarios = respUsuarios.Respuesta!;
+            if (!respLugares.Error) lugares = respLugares.Respuesta!;
+
+            // Cargar evento con sus relaciones
+            var respEvento = await Http.Get<EventoDTO>($"api/evento/id/{Id}");
+            if (!respEvento.Error)
+            {
+                evento = respEvento.Respuesta!;
+            }
+            else
+            {
+                Mensaje = respEvento.ObtenerError();
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Mensaje = resp.ObtenerError();
+            Mensaje = $"Error al cargar datos: {ex.Message}";
         }
+        cargando = false;
+
     }
 
     private async Task GuardarCambios()
     {
-        try
+        var resp = await Http.Put<EventoDTO, int>($"api/evento/{Id}", evento!);
+        if (!resp.Error)
         {
-            var resp = await Http.Put<EventoDTO, int>($"api/evento/{Id}", evento!);
-            if (!resp.Error)
-            {
-                Nav.NavigateTo("/eventos");
-            }
-            else
-            {
-                Mensaje = resp.ObtenerError();
-            }
+            Nav.NavigateTo("/eventos", forceLoad: true);
         }
-        catch(Exception ex)
+        else
         {
-            Mensaje = $"Error al guardar cambios: {ex.Message}";
-            return;
+            Mensaje = resp.ObtenerError();
         }
     }
 
@@ -96,4 +183,3 @@ else
         Nav.NavigateTo("/eventos");
     }
 }
-

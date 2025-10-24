@@ -58,7 +58,7 @@ namespace G1Emergency2025.Repositorio.Repositorios
                         .Select(pe => new PacienteResumenDTO
                         {
                             Id = pe.PacienteId,
-                            ObraSocial = " Obra Social: " + pe.Pacientes!.ObraSocial + " DNI: " + pe.Pacientes!.Personas!.DNI + " Nombre y Apellido: " + pe.Pacientes.Personas.Nombre + " " + pe.Pacientes.Personas.Apellido
+                            ObraSocial = " Obra Social: " + pe.Pacientes!.ObraSocial + " DNI: " + pe.Pacientes!.Personas!.DNI + " Nombre y Apellido: " + pe.Pacientes.Personas.Nombre 
                         }).ToList(),
 
                     Usuarios = e.EventoUsuarios
@@ -106,7 +106,7 @@ namespace G1Emergency2025.Repositorio.Repositorios
                         .Select(pe => new PacienteResumenDTO
                         {
                             Id = pe.PacienteId,
-                            ObraSocial = " Obra Social: " + pe.Pacientes!.ObraSocial + " DNI: " + pe.Pacientes!.Personas!.DNI + " Nombre y Apellido: " + pe.Pacientes.Personas.Nombre + " " + pe.Pacientes.Personas.Apellido
+                            ObraSocial = " Obra Social: " + pe.Pacientes!.ObraSocial + " DNI: " + pe.Pacientes!.Personas!.DNI + " Nombre y Apellido: " + pe.Pacientes.Personas.Nombre
                         }).ToList(),
 
                     Usuarios = e.EventoUsuarios
@@ -148,9 +148,20 @@ namespace G1Emergency2025.Repositorio.Repositorios
             };
 
             context.Eventos.Add(evento);
-            await context.SaveChangesAsync();
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
 
-            // Relaciones
+            {
+                if (ex.InnerException?.Message.Contains("Evento_UQ") == true)
+                {
+                    throw new ApplicationException($"Ya existe un evento con el código '{dto.Codigo}'.");
+                }
+                throw;
+            }
+
             if (dto.PacienteIds != null)
                 foreach (var pid in dto.PacienteIds)
                     await pacienteRepo.AsociarEvento(pid, evento.Id);

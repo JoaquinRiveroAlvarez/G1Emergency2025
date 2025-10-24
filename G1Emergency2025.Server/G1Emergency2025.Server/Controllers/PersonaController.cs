@@ -82,7 +82,6 @@ namespace Proyecto2025.Server.Controllers
                 Persona entidad = new Persona
                 {
                     Nombre = DTO.Nombre,
-                    Apellido = DTO.Apellido,
                     DNI = DTO.DNI,
                     Sexo = DTO.Sexo,
                     Edad = DTO.Edad,
@@ -104,7 +103,6 @@ namespace Proyecto2025.Server.Controllers
             {
                 Id = id,
                 Nombre = DTO.Nombre,
-                Apellido = DTO.Apellido,
                 DNI = DTO.DNI,
                 Sexo = DTO.Sexo,
                 Edad = DTO.Edad,

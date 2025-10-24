@@ -8,5 +8,6 @@ namespace G1Emergency2025.Repositorio.Repositorios
         Task<Paciente?> SelectByObraSocial(string cod);
         Task<List<PacienteListadoDTO>> SelectListaPaciente();
         Task AsociarEvento(int pacienteId, int eventoId);
+        Task<int> CrearPacienteConPersona(Persona persona, Paciente paciente);
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,7 +26,10 @@ namespace G1Emergency2025.Repositorio.Repositorios
                                        .AnyAsync(x => x.Id == id);
             return existe;
         }
-
+        public async Task<bool> ExistePredi(Expression<Func<E, bool>> predicate)
+        {
+            return await context.Set<E>().AnyAsync(predicate);
+        }
         public async Task<List<E>> Select()
         {
             return await context.Set<E>().ToListAsync();
