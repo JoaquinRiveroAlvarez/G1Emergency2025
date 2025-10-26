@@ -30,8 +30,8 @@ namespace G1Emergency2025.Shared.DTO
 
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un tipo de estado válido")]
         public int TipoEstadoId { get; set; }
-        public List<int>? PacienteIds { get; set; } = new();
-        public List<int>? UsuarioIds { get; set; } = new();
-        public List<int>? LugarHechoIds { get; set; } = new();
+        public List<int> PacienteIds { get; set; } = new();
+        public List<int> UsuarioIds { get; set; } = new();
+        public List<int> LugarHechoIds { get; set; } = new();
     }
 }

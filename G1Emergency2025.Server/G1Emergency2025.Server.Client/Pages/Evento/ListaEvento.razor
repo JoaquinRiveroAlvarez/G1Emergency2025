@@ -37,12 +37,17 @@
                 <td>@evento.Telefono</td>
 
                 <td>@evento.FechaHora</td>
+
+                <td>@evento.Causa</td>
+
+                <td>@evento.TipoEstado</td>
+
                 <td>
                     @if (evento.Pacientes != null && evento.Pacientes.Any())
                     {
                         @foreach (var p in evento.Pacientes)
                         {
-                            <div>@p.ObraSocial</div>
+                            <div>@($"{p.NombrePersona} - { p.ObraSocial}")</div>
                         }
                     }
 

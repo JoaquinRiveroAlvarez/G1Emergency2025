@@ -16,7 +16,8 @@ namespace G1Emergency2025.Shared.DTO
         public string Domicilio { get; set; } = string.Empty;
         public string Telefono { get; set; } = string.Empty;
         public required DateTime FechaHora { get; set; } = DateTime.Now;
-        public string Evento { get; set; } = string.Empty;
+        public string Causa { get; set; } = string.Empty;
+        public string TipoEstado { get; set; } = string.Empty;
         public List<PacienteResumenDTO> Pacientes { get; set; } = new();
         public List<UsuarioResumenDTO> Usuarios { get; set; } = new();
         public List<LugarHechoResumenDTO> Lugares { get; set; } = new();

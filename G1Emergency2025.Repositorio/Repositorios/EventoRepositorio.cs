@@ -108,6 +108,8 @@ namespace G1Emergency2025.Repositorio.Repositorios
                     Domicilio = e.Domicilio,
                     Telefono = e.Telefono,
                     FechaHora = e.FechaHora,
+                    Causa = $"Causa: {e.Causa!.posibleCausa}",
+                    TipoEstado = $"Estado: {e.TipoEstados!.Tipo}",
                     //Pacientes = e.PacienteEventos.Select(pe => pe.Paciente.Persona.Nombre).ToList(),
                     //Usuarios = e.EventoUsuarios.Select(eu => eu.Usuario.Nombre).ToList(),
                     //Lugares = e.EventoLugarHechos.Select(elh => elh.LugarHechoResumenDTO.Descripcion).ToList()
@@ -159,10 +161,10 @@ namespace G1Emergency2025.Repositorio.Repositorios
                      .ThenInclude(p => p.Persona)
             .Include(e => e.EventoUsuarios)
                 .ThenInclude(eu => eu.Usuarios)
-                     .ThenInclude(u => u.Persona)
             .Include(e => e.EventoLugarHechos)
                 .ThenInclude(elh => elh.LugarHecho)
             .Include(e => e.TipoEstados)
+            .Include(e => e.Causa)
 
             .Select(e => new EventoListadoDTO
             {
@@ -172,6 +174,8 @@ namespace G1Emergency2025.Repositorio.Repositorios
                 Domicilio = e.Domicilio,
                 Telefono = e.Telefono,
                 FechaHora = e.FechaHora,
+                Causa = $"Causa: {e.Causa!.posibleCausa}",
+                TipoEstado = $"Estado: {e.TipoEstados!.Tipo}",
                 //Pacientes = e.PacienteEventos.Select(pe => pe.Paciente.Persona.Nombre).ToList(),
                 //Usuarios = e.EventoUsuarios.Select(eu => eu.Usuario.Nombre).ToList(),
                 //Lugares = e.EventoLugarHechos.Select(elh => elh.LugarHechoResumenDTO.Descripcion).ToList()
@@ -187,7 +191,7 @@ namespace G1Emergency2025.Repositorio.Repositorios
                     .Select(eu => new UsuarioResumenDTO
                     {
                         Id = eu.UsuarioId,
-                        Nombre = " Nombre de Usuario: " + eu.Usuarios!.Nombre + " DNI: " + eu.Usuarios!.Persona!.DNI,
+                        Nombre = " Nombre de Usuario: " + eu.Usuarios!.Nombre,
                         Contrasena = "Contraseña: " + eu.Usuarios.Contrasena
                     }).ToList(),
 
