@@ -14,7 +14,7 @@ namespace G1Emergency2025.BD.Datos
         public DbSet<Causa> Causas { get; set; }
         public DbSet<DiagPresuntivo> DiagPresuntivos { get; set; }
         public DbSet<Historico> Historicos { get; set; }
-        public DbSet<Persona> Personas { get; set; }
+        public DbSet<Persona> Persona { get; set; }
         public DbSet<Rol> Rols { get; set; }
         public DbSet<TipoMovil> TipoMovils { get; set; }
         public DbSet<TipoTripulante> TipoTripulantes { get; set; }

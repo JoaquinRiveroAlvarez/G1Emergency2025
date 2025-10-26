@@ -79,10 +79,13 @@ else
 
         <div class="form-group">
             <label>Pacientes</label>
+            <button type="button" class="btn btn-outline-primary mb-2" @onclick="AbrirModalPaciente">
+                ➕ Agregar nuevo paciente
+            </button>
             <InputSelectMultiple @bind-Value="evento.PacienteIds" class="form-control">
                 @foreach (var p in pacientes)
                 {
-                    <option value="@p.Id">@p.ObraSocial</option>
+                    <option value="@p.Id">@($"{p.NombrePersona} - {p.ObraSocial}")</option>
                 }
             </InputSelectMultiple>
             <ValidationMessage For="@(() => evento.PacienteIds)" />
@@ -114,6 +117,63 @@ else
         <button class="btn btn-primary" type="submit">Guardar</button>
         <button class="btn btn-secondary" @onclick="Volver">Cancelar</button>
     </EditForm>
+    <!-- Modal para crear Paciente -->
+    @if (mostrarModalPaciente)
+    {
+        <div class="modal show d-block" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">Agregar nuevo Paciente</h5>
+                        <button type="button" class="btn-close" @onclick="CerrarModal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <EditForm Model="@nuevoPaciente" OnValidSubmit="GuardarPaciente">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <InputText class="form-control" @bind-Value="nuevoPaciente.Nombre" />
+                            </div>
+                            <div class="form-group">
+                                <label>DNI</label>
+                                <InputText class="form-control" @bind-Value="nuevoPaciente.DNI" />
+                            </div>
+                            <div class="form-group">
+                                <label>Dirección</label>
+                                <InputText class="form-control" @bind-Value="nuevoPaciente.Dirección" />
+                            </div>
+                            <div class="form-group">
+                                <label>Sexo</label>
+                                <InputSelect class="form-control" @bind-Value="nuevoPaciente.Sexo">
+                                    <option value="">-- Seleccionar Sexo --</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Femenino">Femenino</option>
+                                    <option value="Otro">Otro</option>
+                                </InputSelect>
+                                <ValidationMessage For="@(() => nuevoPaciente.Sexo)" />
+                            </div>
+                            <div class="form-group">
+                                <label>Edad</label>
+                                <InputText class="form-control" @bind-Value="nuevoPaciente.Edad" />
+                            </div>
+                            <div class="form-group">
+                                <label>Obra Social</label>
+                                <InputText class="form-control" @bind-Value="nuevoPaciente.ObraSocial" />
+                            </div>
+
+                            <br />
+                            <button class="btn btn-success" type="submit">Guardar</button>
+                            <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
+                        </EditForm>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-backdrop fade show"></div>
+    }
 }
 
 <p>@Mensaje</p>
@@ -128,6 +188,8 @@ else
     private List<LugarHechoResumenDTO> lugares = new();
     private string Mensaje = "";
     private bool cargando = true;
+    private bool mostrarModalPaciente = false;
+    private PacienteCrearDTO nuevoPaciente = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -164,7 +226,37 @@ else
         cargando = false;
 
     }
+    private void AbrirModalPaciente()
+    {
+        nuevoPaciente = new();
+        mostrarModalPaciente = true;
+    }
 
+    private void CerrarModal()
+    {
+        mostrarModalPaciente = false;
+    }
+    private async Task GuardarPaciente()
+    {
+        var resp = await Http.Post<PacienteCrearDTO, int>("api/paciente/crearConPersona", nuevoPaciente);
+
+        if (!resp.Error)
+        {
+            // Volver a cargar los pacientes disponibles
+            var respPacientes = await Http.Get<List<PacienteResumenDTO>>("api/paciente");
+            if (!respPacientes.Error)
+            {
+                pacientes = respPacientes.Respuesta!;
+            }
+
+            mostrarModalPaciente = false;
+            StateHasChanged();
+        }
+        else
+        {
+            Mensaje = resp.ObtenerError();
+        }
+    }
     private async Task GuardarCambios()
     {
         var resp = await Http.Put<EventoDTO, int>($"api/evento/{Id}", evento!);

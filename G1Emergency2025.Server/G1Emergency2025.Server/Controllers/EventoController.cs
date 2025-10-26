@@ -74,7 +74,19 @@ namespace Proyecto2025.Server.Controllers
         [HttpGet("ListaEvento")]
         public async Task<IActionResult> GetListaEvento()
         {
-            var eventos = await repositorio.SelectListaEvento();
+            //var eventos = await repositorio.SelectListaEvento();
+            //return Ok(eventos);
+            var lista = await repositorio.SelectListaEvento();
+            if (lista == null || !lista.Any())
+                return NotFound("No hay eventos registrados.");
+
+            return Ok(lista);
+        }
+
+        [HttpGet("ListaEventoReciente")]
+        public async Task<IActionResult> GetListaEventoReciente()
+        {
+            var eventos = await repositorio.SelectListaEventoReciente();
             return Ok(eventos);
         }
 
@@ -88,6 +100,8 @@ namespace Proyecto2025.Server.Controllers
             }
             return Ok(lista);
         }
+
+
 
         //[HttpPost]
         //public async Task<IActionResult> PostEvento([FromBody] EventoDTO dto)

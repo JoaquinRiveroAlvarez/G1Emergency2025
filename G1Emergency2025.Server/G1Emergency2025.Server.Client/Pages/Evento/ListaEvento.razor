@@ -4,7 +4,12 @@
 
 <h3>Lista de Eventos</h3>
 <br />
-<a class="btn btn-primary" href="/eventos/crear">Nuevo Evento</a>
+<div class="mb-3"
+<a class="btn btn-primary me-2" href="/eventos/crear">Nuevo Evento</a>
+<button class="btn-link @(mostrarTodos ? "btn-secondary" : "btn-outline-secondary")"@onclick="AlternarVista">
+         @(mostrarTodos ? "Ver eventos de las últimas 24 hs" : "Ver historial")
+</button>
+</div>
 <br>
 <table>
     <tr>
@@ -87,6 +92,7 @@
 @code {
     List<EventoListadoDTO>? eventos;
     string Mensaje = "";
+    bool mostrarTodos = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -94,6 +100,7 @@
         {
             await base.OnInitializedAsync();
             await LeerEventos();
+            // await LeerEventosRecientes();
         }
         catch (Exception ex)
         {
@@ -105,11 +112,18 @@
     {
         try
         {
-            var resp = await Http.Get<List<EventoListadoDTO>>("api/evento/ListaEvento");
+            string endpoint = mostrarTodos
+               ? "api/evento/ListaEvento"             // todos
+               : "api/evento/ListaEventoReciente";    // últimas 24hs
 
+            var resp = await Http.Get<List<EventoListadoDTO>>(endpoint);
+            
             if (!resp.Error)
             {
                 eventos = resp.Respuesta ?? new List<EventoListadoDTO>();
+                Mensaje = mostrarTodos
+                    ? ""
+                    : "";
             }
             else
             {
@@ -131,6 +145,12 @@
             Mensaje = $"❌ Error inesperado: {ex.Message}";
             Console.WriteLine($"[Exception] {ex}");
         }
+    }
+
+    private async Task AlternarVista()
+    {
+        mostrarTodos = !mostrarTodos;
+        await LeerEventos();
     }
 
     private async Task Borrar(EventoListadoDTO evento)

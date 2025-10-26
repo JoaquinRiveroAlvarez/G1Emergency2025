@@ -11,7 +11,10 @@ namespace G1Emergency2025.Shared.DTO
     {
         [Required(ErrorMessage = "La obra social es obligatoria")]
         [MaxLength(100, ErrorMessage = "La cantidad Maxima de caracteres es 50")]
-        public string ObraSocial { get; set; }
+        public string? ObraSocial { get; set; }
+        public PersonaDTO PersonaDTO { get; set; } = null!;
         public int PersonaId { get; set; }
+        public string? NombrePersona { get; set; }
+
     }
 }

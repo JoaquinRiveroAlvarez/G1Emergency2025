@@ -28,14 +28,14 @@ namespace G1Emergency2025.Server.Controllers
             }
             if (lista.Count == 0)
             {
-                return Ok("No existen items en la lista en este momento");
+                return Ok(new List<PacienteResumenDTO>());
             }
 
             return Ok(lista);
         }
 
         [HttpGet("ListaPaciente")]
-        public async Task<ActionResult<List<PacienteListadoDTO>>> GetListaPaciente()
+        public async Task<ActionResult<List<PacienteResumenDTO>>> GetListaPaciente()
         {
             var lista = await repositorio.SelectListaPaciente();
             if (lista == null)
@@ -97,6 +97,7 @@ namespace G1Emergency2025.Server.Controllers
 
                 var paciente = new Paciente
                 {
+                    NombrePersona = dto.Nombre,
                     ObraSocial = dto.ObraSocial
                 };
 
@@ -115,7 +116,8 @@ namespace G1Emergency2025.Server.Controllers
             var entidad = new Paciente
             {
                 Id = id,
-                ObraSocial = DTO.ObraSocial,
+                ObraSocial = DTO.ObraSocial!,
+                NombrePersona = DTO.NombrePersona!,
                 PersonaId = DTO.PersonaId
             };
 

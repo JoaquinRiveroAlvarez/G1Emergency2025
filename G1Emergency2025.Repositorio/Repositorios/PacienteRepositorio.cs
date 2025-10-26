@@ -22,13 +22,15 @@ namespace G1Emergency2025.Repositorio.Repositorios
         {
             return await context.Set<Paciente>().FirstOrDefaultAsync(x => x.ObraSocial == cod);
         }
-        public async Task<List<PacienteListadoDTO>> SelectListaPaciente()
+        public async Task<List<PacienteResumenDTO>> SelectListaPaciente()
         {
             var lista = await context.Pacientes
-                                    .Select(p => new PacienteListadoDTO
+                .Include(p => p.Persona)
+                                    .Select(p => new PacienteResumenDTO
                                     {
                                         Id = p.Id,
-                                        Paciente = $" Obra Social: {p.ObraSocial} - Id Persona: {p.PersonaId} - Nombre y Apellido: {p.Personas!.Nombre} - DNI: {p.Personas!.DNI}"
+                                        ObraSocial = $" Obra Social: {p.ObraSocial}",
+                                        NombrePersona = $"Paciente: {p.Persona!.Nombre}"
                                     })
                                     .ToListAsync();
             return lista;
@@ -49,7 +51,7 @@ namespace G1Emergency2025.Repositorio.Repositorios
             using var transaction = await context.Database.BeginTransactionAsync();
             try
             {
-                await context.Personas.AddAsync(persona);
+                await context.Persona.AddAsync(persona);
                 await context.SaveChangesAsync();
 
                 paciente.PersonaId = persona.Id;

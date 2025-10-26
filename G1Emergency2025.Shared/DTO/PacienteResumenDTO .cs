@@ -10,8 +10,7 @@ namespace G1Emergency2025.Shared.DTO
     public class PacienteResumenDTO 
     {
         public int Id { get; set; }
-        public required string ObraSocial { get; set; }
-
-        //public PersonaDTO? Persona { get; set; }
+        public string ObraSocial { get; set; } = string.Empty;
+        public string NombrePersona {  get; set; } = string.Empty;
     }
 }

@@ -27,7 +27,7 @@ namespace G1Emergency2025.Repositorio.Repositorios
         }
         public async Task<List<PersonaListadoDTO>> SelectListaPersona()
         {
-            var lista = await context.Personas
+            var lista = await context.Persona
                                     .Select(p => new PersonaListadoDTO
                                     {
                                         Id = p.Id,

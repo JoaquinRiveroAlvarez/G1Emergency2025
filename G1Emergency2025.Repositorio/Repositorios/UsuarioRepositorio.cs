@@ -28,7 +28,7 @@ namespace G1Emergency2025.Repositorio.Repositorios
                                     .Select(p => new UsuarioListadoDTO
                                     {
                                         Id = p.Id,
-                                        Usuario = $" Nombre de Usuario: {p.Nombre} - Contraseña: {p.Contrasena} - Id Persona: {p.PersonaId} - Nombre y Apellido: {p.Personas!.Nombre}"
+                                        Usuario = $" Nombre de Usuario: {p.Nombre} - Contraseña: {p.Contrasena} - Id Persona: {p.PersonaId} - Nombre y Apellido: {p.Persona!.Nombre}"
                                     })
                                     .ToListAsync();
             return lista;
