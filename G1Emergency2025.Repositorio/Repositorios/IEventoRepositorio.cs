@@ -11,5 +11,6 @@ namespace G1Emergency2025.Repositorio.Repositorios
         Task<EventoListadoDTO?> SelectListaPorId(int id);
         Task<int> InsertarEvento(EventoDTO dto);
         Task<bool> DeleteEvento(int id);
+        Task<bool> ActualizarRelacionesEvento(int id, EventoDTO dto);
     }
 }

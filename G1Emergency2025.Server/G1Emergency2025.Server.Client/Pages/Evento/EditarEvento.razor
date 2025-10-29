@@ -162,7 +162,9 @@ else
                                 <label>Obra Social</label>
                                 <InputText class="form-control" @bind-Value="nuevoPaciente.ObraSocial" />
                             </div>
+                            <div>
 
+                            </div>
                             <br />
                             <button class="btn btn-success" type="submit">Guardar</button>
                             <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
@@ -191,6 +193,7 @@ else
     private bool mostrarModalPaciente = false;
     private PacienteCrearDTO nuevoPaciente = new();
 
+
     protected override async Task OnInitializedAsync()
     {
         try
@@ -213,6 +216,9 @@ else
             if (!respEvento.Error)
             {
                 evento = respEvento.Respuesta!;
+                // evento.PacienteIds = evento.Pacientes?.Select(p => p.Id).ToList() ?? new List<int>();
+                // evento.UsuarioIds = evento.Usuarios?.Select(u => u.Id).ToList() ?? new List<int>();
+                // evento.LugarHechoIds = evento.Lugares?.Select(l => l.Id).ToList() ?? new List<int>();
             }
             else
             {
@@ -238,6 +244,20 @@ else
     }
     private async Task GuardarPaciente()
     {
+        // var dto = new EventoDTO
+        // {
+        //     Id = evento!.Id,
+        //     Codigo = evento.Codigo,
+        //     Domicilio = evento.Domicilio,
+        //     Telefono = evento.Telefono,
+        //     FechaHora = evento.FechaHora,
+        //     colorEvento = evento.colorEvento,
+        //     CausaId = evento.CausaId,
+        //     TipoEstadoId = evento.TipoEstadoId,
+        //     PacienteIds = evento.Pacientes?.Select(p => p.Id).ToList() ?? new(),
+        //     UsuarioIds = evento.Usuarios?.Select(u => u.Id).ToList() ?? new(),
+        //     LugarHechoIds = evento.Lugares?.Select(l => l.Id).ToList() ?? new()
+        // };
         var resp = await Http.Post<PacienteCrearDTO, int>("api/paciente/crearConPersona", nuevoPaciente);
 
         if (!resp.Error)

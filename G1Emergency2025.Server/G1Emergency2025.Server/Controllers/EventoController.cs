@@ -48,7 +48,7 @@ namespace Proyecto2025.Server.Controllers
         }
 
         [HttpGet("Id/{id:int}")]
-        public async Task<ActionResult<EventoDTO>> GetById(int id)
+        public async Task<ActionResult<EventoListadoDTO>> GetById(int id)
         {
             var tipoProvincia = await repositorio.SelectById(id);
             if (tipoProvincia is null)
@@ -101,17 +101,6 @@ namespace Proyecto2025.Server.Controllers
             return Ok(lista);
         }
 
-
-
-        //[HttpPost]
-        //public async Task<IActionResult> PostEvento([FromBody] EventoDTO dto)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-
-        //    var id = await repositorio.InsertarEvento(dto);
-        //    return CreatedAtAction(nameof(GetById), new { id }, new { id });
-        //}
         [HttpPost]
         public async Task<IActionResult> PostEvento([FromBody] EventoDTO dto)
         {
@@ -132,30 +121,62 @@ namespace Proyecto2025.Server.Controllers
             }
         }
 
+        //[HttpPut("{id:int}")]
+        //public async Task<ActionResult> Put(int id, EventoDTO DTO)
+        //{
+        //    var entidad = new Evento
+        //    {
+        //        Id = id,
+        //        Codigo = DTO.Codigo,
+        //        colorEvento = DTO.colorEvento,
+        //        Domicilio = DTO.Domicilio,
+        //        Telefono = DTO.Telefono,
+        //        FechaHora = DTO.FechaHora,
+        //        CausaId = DTO.CausaId,
+        //        TipoEstadoId = DTO.TipoEstadoId
+        //    };
+
+        //    var resultado = await repositorio.Update(id, entidad);
+
+        //    if (!resultado)
+        //    {
+        //        return BadRequest("Datos no válidos");
+        //    }
+
+        //    return Ok($"El registro con el id: {id} fue actualizado correctamente.");
+        //}
+
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, EventoDTO DTO)
+        public async Task<ActionResult> Put(int id, EventoDTO dto)
         {
-            var entidad = new Evento
-            {
-                Id = id,
-                Codigo = DTO.Codigo,
-                colorEvento = DTO.colorEvento,
-                Domicilio = DTO.Domicilio,
-                Telefono = DTO.Telefono,
-                FechaHora = DTO.FechaHora,
-                CausaId = DTO.CausaId,
-                TipoEstadoId = DTO.TipoEstadoId
-            };
+            if (id != dto.Id)
+                return BadRequest("El ID del evento no coincide con el DTO enviado.");
+
+            // 🔹 Primero actualizamos los datos base del evento
+            var entidad = await repositorio.SelectById(id);
+            if (entidad == null)
+                return NotFound($"No se encontró el evento con ID {id}");
+
+            entidad.Codigo = dto.Codigo;
+            entidad.Domicilio = dto.Domicilio;
+            entidad.Telefono = dto.Telefono;
+            entidad.FechaHora = dto.FechaHora;
+            entidad.colorEvento = dto.colorEvento;
+            entidad.CausaId = dto.CausaId;
+            entidad.TipoEstadoId = dto.TipoEstadoId;
 
             var resultado = await repositorio.Update(id, entidad);
-
             if (!resultado)
-            {
-                return BadRequest("Datos no válidos");
-            }
+                return BadRequest("Error al actualizar los datos del evento.");
 
-            return Ok($"El registro con el id: {id} fue actualizado correctamente.");
+            // 🔹 Luego actualizamos las relaciones N:M (Pacientes, Usuarios, Lugares)
+            var relacionesOk = await repositorio.ActualizarRelacionesEvento(id, dto);
+            if (!relacionesOk)
+                return BadRequest("Error al actualizar las relaciones del evento.");
+
+            return Ok($"El evento con ID {id} fue actualizado correctamente.");
         }
+
         //[HttpPut("{id}")]
         //public async Task<IActionResult> PutEvento(int id, EventoDTO dto)
         //{

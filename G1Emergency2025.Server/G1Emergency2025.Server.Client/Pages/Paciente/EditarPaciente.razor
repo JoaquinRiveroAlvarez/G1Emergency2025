@@ -1,0 +1,113 @@
+﻿@* @page "/pacientes/editar/{Id:int}"
+@inject IHttpServicio Http
+@inject NavigationManager Nav
+
+<h3>Editar Paciente</h3>
+
+@if (cargando)
+{
+    <p>Cargando datos...</p>
+}
+else if (modelo == null)
+{
+    <p>No se encontró el paciente.</p>
+}
+else
+{
+    <EditForm Model="@modelo" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <h5>Datos de la Persona</h5>
+        <div class="form-group">
+            <label>Nombre</label>
+            <InputText class="form-control" @bind-Value="modelo.PersonaDTO.Nombre" />
+            <ValidationMessage For="@(() => modelo.PersonaDTO.Nombre)" />
+        </div>
+
+        <div class="form-group">
+            <label>DNI</label>
+            <InputText class="form-control" @bind-Value="modelo.PersonaDTO.DNI" />
+            <ValidationMessage For="@(() => modelo.PersonaDTO.DNI)" />
+        </div>
+
+        <div class="form-group">
+            <label>Dirección</label>
+            <InputText class="form-control" @bind-Value="modelo.PersonaDTO.Dirección" />
+            <ValidationMessage For="@(() => modelo.PersonaDTO.Dirección)" />
+        </div>
+
+        <div class="form-group">
+            <label>Sexo</label>
+            <InputSelect class="form-control" @bind-Value="modelo.PersonaDTO.Sexo">
+                <option value="">-- Seleccionar --</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Otro">Otro</option>
+            </InputSelect>
+            <ValidationMessage For="@(() => modelo.PersonaDTO.Sexo)" />
+        </div>
+
+        <div class="form-group">
+            <label>Edad</label>
+            <InputText class="form-control" @bind-Value="modelo.PersonaDTO.Edad" />
+            <ValidationMessage For="@(() => modelo.PersonaDTO.Edad)" />
+        </div>
+
+        <hr />
+
+        <h5>Datos del Paciente</h5>
+        <div class="form-group">
+            <label>Obra Social</label>
+            <InputText class="form-control" @bind-Value="modelo.ObraSocial" />
+            <ValidationMessage For="@(() => modelo.ObraSocial)" />
+        </div>
+
+        <br />
+        <button class="btn btn-primary" type="submit">Guardar</button>
+        <button class="btn btn-secondary" @onclick="Volver">Cancelar</button>
+    </EditForm>
+}
+
+<p>@Mensaje</p>
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private PacienteDTO? modelo;
+    private bool cargando = true;
+    private string Mensaje = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resp = await Http.Get<PacienteDTO>($"api/paciente/id/{Id}");
+        if (!resp.Error)
+        {
+            modelo = resp.Respuesta!;
+        }
+        else
+        {
+            Mensaje = resp.ObtenerError();
+        }
+        cargando = false;
+    }
+
+    private async Task Guardar()
+    {
+        var resp = await Http.Put<PacienteDTO, int>($"api/paciente/{Id}", modelo!);
+        if (!resp.Error)
+        {
+            Nav.NavigateTo("/pacientes", forceLoad: true);
+        }
+        else
+        {
+            Mensaje = resp.ObtenerError();
+        }
+    }
+
+    private void Volver()
+    {
+        Nav.NavigateTo("/pacientes");
+    }
+}
+ *@

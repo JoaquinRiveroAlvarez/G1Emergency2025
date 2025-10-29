@@ -176,9 +176,6 @@ namespace G1Emergency2025.Repositorio.Repositorios
                 FechaHora = e.FechaHora,
                 Causa = $"Causa: {e.Causa!.posibleCausa}",
                 TipoEstado = $"Estado: {e.TipoEstados!.Tipo}",
-                //Pacientes = e.PacienteEventos.Select(pe => pe.Paciente.Persona.Nombre).ToList(),
-                //Usuarios = e.EventoUsuarios.Select(eu => eu.Usuario.Nombre).ToList(),
-                //Lugares = e.EventoLugarHechos.Select(elh => elh.LugarHechoResumenDTO.Descripcion).ToList()
                 Pacientes = e.PacienteEventos
                     .Select(pe => new PacienteResumenDTO
                     {
@@ -254,6 +251,45 @@ namespace G1Emergency2025.Repositorio.Repositorios
 
             return evento.Id;
         }
+
+        public async Task<bool> ActualizarRelacionesEvento(int id, EventoDTO dto)
+        {
+            var evento = await context.Eventos
+                .Include(e => e.PacienteEventos)
+                .Include(e => e.EventoUsuarios)
+                .Include(e => e.EventoLugarHechos)
+                .FirstOrDefaultAsync(e => e.Id == id);
+
+            if (evento == null) return false;
+
+            // 🔹 Actualizar relaciones Pacientes
+            evento.PacienteEventos.Clear();
+            if (dto.PacienteIds != null && dto.PacienteIds.Any())
+            {
+                foreach (var pid in dto.PacienteIds)
+                    evento.PacienteEventos.Add(new PacienteEvento { PacienteId = pid, EventoId = id });
+            }
+
+            // 🔹 Actualizar relaciones Usuarios
+            evento.EventoUsuarios.Clear();
+            if (dto.UsuarioIds != null && dto.UsuarioIds.Any())
+            {
+                foreach (var uid in dto.UsuarioIds)
+                    evento.EventoUsuarios.Add(new EventoUsuario { UsuarioId = uid, EventoId = id });
+            }
+
+            // 🔹 Actualizar relaciones Lugares
+            evento.EventoLugarHechos.Clear();
+            if (dto.LugarHechoIds != null && dto.LugarHechoIds.Any())
+            {
+                foreach (var lid in dto.LugarHechoIds)
+                    evento.EventoLugarHechos.Add(new EventoLugarHecho { LugarHechoId = lid, EventoId = id });
+            }
+
+            await context.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<bool> DeleteEvento(int id)
         {
             var evento = await context.Eventos

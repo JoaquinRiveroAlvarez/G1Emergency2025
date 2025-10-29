@@ -110,26 +110,37 @@ namespace G1Emergency2025.Server.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, PacienteDTO DTO)
-        {
-            var entidad = new Paciente
-            {
-                Id = id,
-                ObraSocial = DTO.ObraSocial!,
-                NombrePersona = DTO.NombrePersona!,
-                PersonaId = DTO.PersonaId
-            };
+        //[HttpPut("{id:int}")]
+        //public async Task<ActionResult> Put(int id, PacienteDTO DTO)
+        //{
+        //    var entidad = new Paciente
+        //    {
+        //        Id = id,
+        //        ObraSocial = DTO.ObraSocial!,
+        //        NombrePersona = DTO.NombrePersona!,
+        //        PersonaId = DTO.PersonaId
+        //    };
 
-            var resultado = await repositorio.Update(id, entidad);
+        //    var resultado = await repositorio.Update(id, entidad);
 
-            if (!resultado)
-            {
-                return BadRequest("Datos no válidos");
-            }
+        //    if (!resultado)
+        //    {
+        //        return BadRequest("Datos no válidos");
+        //    }
 
-            return Ok($"El registro con el id: {id} fue actualizado correctamente.");
-        }
+        //    return Ok($"El registro con el id: {id} fue actualizado correctamente.");
+        //}
+        //[HttpPut("{id:int}/ActualizarConEventos")]
+        //public async Task<IActionResult> Put(int id, PacienteActualizarDTO dto)
+        //{
+        //    var resultado = await repositorio.UpdatePacienteConEventos(id, dto);
+
+        //    if (!resultado)
+        //        return BadRequest("No se pudo actualizar el paciente. Verifique los datos enviados.");
+
+        //    return Ok($"Paciente con ID {id} y sus eventos asociados fueron actualizados correctamente.");
+        //}
+
 
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)

@@ -46,6 +46,58 @@ namespace G1Emergency2025.Repositorio.Repositorios
             context.PacienteEventos.Add(rel);
             await context.SaveChangesAsync();
         }
+        public async Task<bool> UpdatePacienteConEventos(int id, PacienteActualizarDTO dto)
+        {
+            // 1. Buscar paciente con relaciones
+            var paciente = await context.Pacientes
+                .Include(p => p.Persona)
+                .Include(p => p.PacienteEventos) // Tabla intermedia
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (paciente == null)
+                return false;
+
+            // 2. Actualizar datos del paciente
+            paciente.ObraSocial = dto.ObraSocial!;
+
+            // 3. Actualizar datos de persona
+            if (paciente.Persona != null)
+            {
+                paciente.Persona.Nombre = dto.PersonaDTO.Nombre;
+                paciente.Persona.DNI = dto.PersonaDTO.DNI;
+                paciente.Persona.Dirección = dto.PersonaDTO.Dirección;
+                paciente.Persona.Sexo = dto.PersonaDTO.Sexo;
+                paciente.Persona.Edad = dto.PersonaDTO.Edad;
+            }
+
+            // 4. Actualizar relaciones N:M
+            var eventosActuales = paciente.PacienteEventos.Select(pe => pe.EventoId).ToList();
+
+            // Eventos a agregar
+            var eventosNuevos = dto.EventosIds.Except(eventosActuales).ToList();
+            foreach (var eventoId in eventosNuevos)
+            {
+                paciente.PacienteEventos.Add(new PacienteEvento
+                {
+                    PacienteId = id,
+                    EventoId = eventoId
+                });
+            }
+
+            // Eventos a eliminar
+            var eventosAEliminar = eventosActuales.Except(dto.EventosIds).ToList();
+            foreach (var eventoId in eventosAEliminar)
+            {
+                var relacion = paciente.PacienteEventos.FirstOrDefault(pe => pe.EventoId == eventoId);
+                if (relacion != null)
+                    context.PacienteEventos.Remove(relacion);
+            }
+
+            // 5. Guardar cambios
+            await context.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<int> CrearPacienteConPersona(Persona persona, Paciente paciente)
         {
             using var transaction = await context.Database.BeginTransactionAsync();
