@@ -10,5 +10,6 @@ namespace G1Emergency2025.Repositorio.Repositorios
         Task AsociarEvento(int pacienteId, int eventoId);
         Task<int> CrearPacienteConPersona(Persona persona, Paciente paciente);
         Task<bool> UpdatePacienteConEventos(int id, PacienteActualizarDTO dto);
+        Task<Paciente?> ObtenerConPersonaAsync(int id);
     }
 }

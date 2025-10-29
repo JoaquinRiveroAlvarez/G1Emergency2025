@@ -1,99 +1,158 @@
 ﻿@page "/eventos"
 @using System.Text.Json
 @inject IHttpServicio Http
+@inject NavigationManager Nav
 
 <h3>Lista de Eventos</h3>
-<br />
-<div class="mb-3"
-<a class="btn btn-primary me-2" href="/eventos/crear">Nuevo Evento</a>
-<button class="btn-link @(mostrarTodos ? "btn-secondary" : "btn-outline-secondary")"@onclick="AlternarVista">
-         @(mostrarTodos ? "Ver eventos de las últimas 24 hs" : "Ver historial")
-</button>
+
+<div class="mb-3">
+    <a class="btn btn-danger me-2"
+       href="/eventos/crear"
+       title="Nuevo Evento">
+        +
+    </a>
+
+    <button class="btn btn-outline-secondary"
+            @onclick="AlternarVista">
+        @(mostrarTodos
+                ? "Ver eventos de las últimas 24 hs"
+                : "Ver historial")
+    </button>
 </div>
-<br>
-<table>
-    <tr>
-        <th>Eventos</th>
-    </tr>
-    @if (eventos == null)
-    {
-        <p>Buscando...</p>
-    }
-    else if (eventos.Count == 0)
-    {
-        <p>No hay Eventos cargados en esta lista</p>
-    }
-    else
-    {
-        @foreach (var evento in eventos)
-        {
-            <tr>
-                <td>@evento.Codigo</td>
 
-                <td>@evento.colorEvento</td>
+@if (eventos == null)
+{
+    <div class="alert alert-secondary">Buscando...</div>
+}
+else if (eventos.Count == 0)
+{
+    <div class="alert alert-warning">No hay Eventos cargados en esta lista</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Código</th>
+                    <th style="width:40px;"></th>
+                    <th>Domicilio</th>
+                    <th>Teléfono</th>
+                    <th>Fecha</th>
+                    <th>Paciente</th>
+                    <th>Usuario</th>
+                    <th>Descripción</th>
+                    <th style="width:90px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var evento in eventos)
+                {
+                    <tr>
+                        <td>@evento.Codigo</td>
 
-                <td>@evento.Domicilio</td>
+                        <td class="text-center align-middle">
+                            <span class="color-circle"
+                                  style="
+                                                    display:inline-block;
+                                                    width:14px;
+                                                    height:14px;
+                                                    border-radius:50%;
+                                                    background-color:@(
+                                  evento.colorEvento == ColorEvento.Rojo
+                                      ? "red"
+                                      : evento.colorEvento == ColorEvento.Amarillo
+                                          ? "yellow"
+                                          : evento.colorEvento == ColorEvento.Verde
+                                              ? "green"
+                                              : "gray"
+                                                                                                                                                );
+                                                    border:1px solid #999;">
+                            </span>
+                        </td>
 
-                <td>@evento.Telefono</td>
+                        <td>@evento.Domicilio</td>
 
-                <td>@evento.FechaHora</td>
+                        <td>@evento.Telefono</td>
 
-                <td>@evento.Causa</td>
+                        <td>
+                            @evento.FechaHora.ToString("dd/MM/yyyy") <br />
+                            <small class="text-muted">@evento.FechaHora.ToString("HH:mm:ss")</small>
+                        </td>
 
-                <td>@evento.TipoEstado</td>
+                        <td class="align-middle">
+                            @if (evento.Pacientes != null && evento.Pacientes.Any())
+                            {
+                                @foreach (var p in evento.Pacientes)
+                                {
+                                    <a class="btn btn-sm btn-outline-info me-1"
+                                       title="Datos del paciente"
+                                       href="/paciente/detalle/@p.Id">
+                                        👁️
+                                    </a>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </td>
 
-                <td>
-                    @if (evento.Pacientes != null && evento.Pacientes.Any())
-                    {
-                        @foreach (var p in evento.Pacientes)
-                        {
-                            <div>@($"{p.NombrePersona} - { p.ObraSocial}")</div>
-                        }
-                    }
+                        <td class="align-middle">
+                            @if (evento.Usuarios != null && evento.Usuarios.Any())
+                            {
+                                @foreach (var u in evento.Usuarios)
+                                {
+                                    <div class="mb-2">
+                                        @u.Nombre
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </td>
 
-                </td>
-                <td>
-                    @if (evento.Usuarios != null && evento.Usuarios.Any())
-                    {
-                        @foreach (var u in evento.Usuarios)
-                        {
-                            <div>@u.Nombre</div>
-                        }
-                    }
+                        <td class="align-middle">
+                            @if (evento.Lugares != null && evento.Lugares.Any())
+                            {
+                                @foreach (var l in evento.Lugares)
+                                {
+                                    <div>@l.Descripcion</div>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">Ninguna</span>
+                            }
+                        </td>
 
-                </td>
-                <td>
-                    @if (evento.Lugares != null && evento.Lugares.Any())
-                    {
-                        @foreach (var l in evento.Lugares)
-                        {
-                            <div>@l.Descripcion</div>
-                        }
-                    }
-                </td>
-                <td>
-                    <a class="btn btn-primary" href="/eventos/editar/@evento.Id">
-                        Editar
-                    </a>
-                </td>
-                <td>
-                    <button class="btn btn-danger"
-                            @onclick="() => Borrar(evento)">
-                        Borrar
-                    </button>
-                </td>
-                <td>
-                    @if (!string.IsNullOrEmpty(Mensaje))
-                    {
-                        <div class="alert alert-info mt-3">@Mensaje</div>
-                    }
-                </td>
-            </tr>
-        }
-    }
-</table>
-<br />
-<p>@Mensaje</p>
+                        <td class="text-center" style="white-space:nowrap;">
+                            <button class="btn btn-sm btn-outline-primary me-1"
+                                    title="Editar"
+                                    @onclick="() => Editar(evento.Id)">
+                                ✏
+                            </button>
+
+                            <button class="btn btn-sm btn-outline-danger"
+                                    title="Borrar"
+                                    @onclick="() => Borrar(evento)">
+                                🗑
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Mensaje))
+{
+    <div class="alert alert-info mt-3">@Mensaje</div>
+}
+
 @code {
     List<EventoListadoDTO>? eventos;
     string Mensaje = "";
@@ -103,9 +162,7 @@
     {
         try
         {
-            await base.OnInitializedAsync();
             await LeerEventos();
-            // await LeerEventosRecientes();
         }
         catch (Exception ex)
         {
@@ -113,22 +170,29 @@
             Console.WriteLine($"[InitError] {ex}");
         }
     }
+
     private async Task LeerEventos()
     {
         try
         {
             string endpoint = mostrarTodos
-               ? "api/evento/ListaEvento"             // todos
+               ? "api/evento/ListaEvento"             // historial
                : "api/evento/ListaEventoReciente";    // últimas 24hs
 
             var resp = await Http.Get<List<EventoListadoDTO>>(endpoint);
-            
+
             if (!resp.Error)
             {
                 eventos = resp.Respuesta ?? new List<EventoListadoDTO>();
-                Mensaje = mostrarTodos
-                    ? ""
-                    : "";
+
+                // ordenar por color: rojo -> amarillo -> verde
+                eventos = eventos
+                    .OrderBy(e =>
+                        e.colorEvento == ColorEvento.Rojo ? 0 :
+                        e.colorEvento == ColorEvento.Amarillo ? 1 :
+                        e.colorEvento == ColorEvento.Verde ? 2 : 3
+                    )
+                    .ToList();
             }
             else
             {
@@ -166,7 +230,14 @@
         {
             Mensaje = resp.ObtenerError();
         }
+
         await LeerEventos();
     }
+
+    private void Editar(int id)
+    {
+        Nav.NavigateTo($"/eventos/editar/{id}");
+    }
 }
+
 

@@ -119,5 +119,11 @@ namespace G1Emergency2025.Repositorio.Repositorios
                 throw;
             }
         }
+        public async Task<Paciente?> ObtenerConPersonaAsync(int id)
+        {
+            return await context.Pacientes
+                .Include(p => p.Persona)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
     }
 }

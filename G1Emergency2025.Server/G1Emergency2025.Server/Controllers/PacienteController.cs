@@ -61,6 +61,27 @@ namespace G1Emergency2025.Server.Controllers
             return Ok(Paciente);
         }
 
+        [HttpGet("detalleConPersona/{id:int}")]
+        public async Task<ActionResult> ObtenerConPersona(int id)
+        {
+            var paciente = await repositorio.ObtenerConPersonaAsync(id);
+            if (paciente == null)
+                return NotFound();
+
+            // Armo la respuesta combinando Paciente + Persona
+            var dto = new
+            {
+                paciente.Id,
+                paciente.ObraSocial,
+                paciente.Persona?.Nombre,
+                paciente.Persona?.DNI,
+                paciente.Persona?.Edad,
+                paciente.Persona?.Sexo,
+                Direccion = paciente.Persona?.Dirección
+            };
+
+            return Ok(dto);
+        }
         //[HttpPost]
         //public async Task<ActionResult<int>> Post(PacienteDTO DTO)
         //{

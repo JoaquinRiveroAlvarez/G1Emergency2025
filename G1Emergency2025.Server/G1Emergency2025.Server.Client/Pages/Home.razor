@@ -1,36 +1,9 @@
 ﻿@page "/"
+@inject NavigationManager Nav
 
-<PageTitle>Inicio - 107 Emergencias Médicas</PageTitle>
-
-<div class="text-center my-4">
-    <h1 class="text-3xl font-bold">🚑 107 - Sistema de Emergencias Médicas</h1>
-    <p class="text-gray-600">Bienvenido al panel de gestión de emergencias</p>
-    <p>@DateTime.Now.ToString("dd/MM/yyyy HH:mm")</p>
-</div>
-
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-
-    <div class="p-4 bg-blue-100 rounded-xl shadow hover:shadow-lg cursor-pointer">
-        <h2 class="text-xl font-semibold">📋 Nuevo Evento</h2>
-        <p>Registrar una nueva emergencia médica</p>
-    </div>
-
-    <div class="p-4 bg-green-100 rounded-xl shadow hover:shadow-lg cursor-pointer">
-        <h2 class="text-xl font-semibold">📊 Emergencias Activas</h2>
-        <p>Ver y gestionar los casos en curso</p>
-    </div>
-
-    <div class="p-4 bg-yellow-100 rounded-xl shadow hover:shadow-lg cursor-pointer">
-        <h2 class="text-xl font-semibold">🚓 Móviles Disponibles</h2>
-        <p>Controlar el estado de las unidades</p>
-    </div>
-</div>
-
-<div class="mt-8 p-4 bg-gray-100 rounded-xl">
-    <h3 class="text-lg font-semibold">📢 Avisos Internos</h3>
-    <ul class="list-disc list-inside">
-        <li>Reunión de coordinación el viernes 10:00hs</li>
-        <li>Nueva versión del sistema desplegada</li>
-        <li>Recordar actualizar datos de móviles</li>
-    </ul>
-</div>
+@code {
+    protected override void OnInitialized()
+    {
+        Nav.NavigateTo("/eventos");
+    }
+}
